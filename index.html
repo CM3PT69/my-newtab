@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Nexus New-Tab V5</title>
+    <title>Nexus New-Tab V5.1</title>
     <!-- Сначала фон, потом общие стили -->
     <link rel="stylesheet" href="background.css">
     <link rel="stylesheet" href="style.css">
@@ -255,21 +255,14 @@
                         </svg>
                     </button>
                     <div class="settings-dropdown" id="settings-dropdown">
-                        <!-- Динамическая панель -->
-                        <div style="padding: 10px 16px; color: #aaa; font-size: 12px; text-transform: uppercase;">
-                            Динамическая панель</div>
-                        <button class="toggle-switch" id="dynamic-toggle">
-                            <span class="toggle-label-on">Включить</span>
-                            <span class="toggle-label-off">Отключить</span>
-                        </button>
-                        <button id="reset-panel">Сбросить положение панели</button>
-                        <hr style="border-color: rgba(255,255,255,0.1); margin: 4px 0;">
-                        <label
-                            style="display: flex; align-items: center; gap: 8px; padding: 6px 16px; cursor: pointer;">
-                            <input type="checkbox" id="save-position">
-                            <span style="font-size: 13px;">Сохранять положение</span>
-                        </label>
-                        <hr style="border-color: rgba(255,255,255,0.1); margin: 4px 0;">
+                        <!-- Динамическая панель (кнопка) -->
+                        <button id="dynamic-panel-btn">Динамическая панель</button>
+                        <!-- Вложенная панель (показывается при клике на кнопку выше) -->
+                        <div class="settings-subpanel" id="dynamic-subpanel">
+                            <button id="dynamic-toggle" class="dynamic-toggle-btn">Включить</button>
+                            <button id="reset-panel">Сбросить положение панели</button>
+                        </div>
+                        <hr>
                         <button>Тест 2</button>
                         <button>Тест 3</button>
                     </div>
@@ -312,18 +305,6 @@
 
     <!-- Скрипты -->
     <script src="script.js"></script>
-
-    <!-- Центральная шестерёнка-спасатель -->
-    <div id="rescue-gear"
-        style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 9999; cursor: pointer; width: 60px; height: 60px; background: #2a2a3e; border-radius: 50%; align-items: center; justify-content: center; box-shadow: 0 0 20px rgba(255,0,0,0.5); transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);">
-        <svg viewBox="0 0 24 24" width="36" height="36" fill="white">
-            <path
-                d="M19.14 12.94c.04-.31.06-.63.06-.94 0-.31-.02-.63-.06-.94l2.03-1.58c.18-.14.23-.38.12-.56l-1.89-3.28c-.12-.19-.36-.26-.56-.18l-2.38.96c-.5-.38-1.06-.68-1.66-.88L14.72 3.3c-.04-.2-.2-.34-.4-.34h-3.78c-.2 0-.36.14-.4.34l-.26 2.38c-.6.2-1.16.5-1.66.88l-2.38-.96c-.2-.08-.44-.01-.56.18l-1.89 3.28c-.12.19-.07.42.12.56l2.03 1.58c-.04.31-.06.63-.06.94 0 .31.02.63.06.94l-2.03 1.58c-.18.14-.23.38-.12.56l1.89 3.28c.12.19.36.26.56.18l2.38-.96c.5.38 1.06.68 1.66.88l.26 2.38c.04.2.2.34.4.34h3.78c.2 0 .36-.14.4-.34l.26-2.38c.6-.2 1.16-.5 1.66-.88l2.38.96c.2.08.44.01.56-.18l1.89-3.28c.12-.19.07-.42-.12-.56l-2.03-1.58zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z" />
-        </svg>
-    </div>
-    <div id="rescue-text"
-        style="display: none; position: fixed; top: calc(50% - 50px); left: 50%; transform: translateX(-50%); color: white; font-size: 20px; font-weight: bold; z-index: 9999; text-shadow: 0 0 10px black;">
-        Нажми на меня пупсик :3</div>
 </body>
 
 </html>
