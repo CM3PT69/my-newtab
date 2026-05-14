@@ -212,6 +212,22 @@
         .overlay.open {
             display: block;
         }
+        .logo-and-wordmark {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .logo-icon {
+            width: 36px;  /* подгони под свой вкус */
+            height: 36px;
+        }
+        .logo-text {
+            font-size: 26px;
+            font-weight: bold;
+            color: #ffffff;
+            font-family: "Segoe UI", "Helvetica Neue", sans-serif;
+            line-height: 1;
+        }
     </style>
 </head>
 <body>
@@ -225,9 +241,12 @@
 
     <div class="outer-wrapper">
         <!-- Логотип NexusLogoV1 (встроенный base64, заменишь на свой) -->
-        <div class="logo-and-wordmark-wrapper">
-            <img class="logo-icon" src="NexusLogoV1.png" alt="Nexus Logo">
-        </div>
+       <div class="logo-and-wordmark-wrapper">
+    <div class="logo-and-wordmark">
+        <img class="logo-icon" src="NexusLogoV1.png" alt="Nexus Logo">
+        <span class="logo-text">Nexus</span>
+    </div>
+</div>
 
         <!-- Поисковая строка с иконкой GenZH (встроенная) -->
         <div class="search-wrapper">
