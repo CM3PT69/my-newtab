@@ -1,310 +1,405 @@
-<!DOCTYPE html>
-<html lang="ru" dir="ltr">
+/* =============================================
+   БАЗОВЫЕ СБРОСЫ И ТЕЛО
+   ============================================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+html, body {
+    height: 100%;
+}
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background-color: #000;
+    font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    color: #fff;
+}
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Nexus New-Tab V4</title>
-    <!-- Сначала фон, потом общие стили -->
-    <link rel="stylesheet" href="background.css">
-    <link rel="stylesheet" href="style.css">
-</head>
+/* =============================================
+   ПОГОДНЫЙ ВИДЖЕТ
+   ============================================= */
+.weather-widget {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(8px);
+    border-radius: 12px;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    color: #fff;
+    z-index: 100;
+}
+.weather-widget .temp {
+    font-size: 22px;
+    font-weight: bold;
+}
+.weather-widget .desc {
+    text-transform: capitalize;
+}
+.weather-icon {
+    font-size: 28px;
+}
 
-<body>
+/* =============================================
+   ЛОГОТИП
+   ============================================= */
+.outer-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px;
+    padding: 0 20px;
+}
+.logo-and-wordmark-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+.logo-and-wordmark {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.logo-icon {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+}
+.logo-text {
+    font-size: 26px;
+    font-weight: bold;
+    color: #ffffff;
+    font-family: "Segoe UI", "Helvetica Neue", sans-serif;
+    line-height: 1;
+}
 
-    <!-- Фоновый лазерный рисунок (фиксированный, за контентом) -->
-    <div class="background-svg">
-        <svg viewBox="0 0 1600 900" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-                <!-- Размытие для фоновых лучей -->
-                <filter id="blurGlow" x="-50%" y="-50%" width="200%" height="200%">
-                    <feGaussianBlur stdDeviation="15" />
-                </filter>
+/* =============================================
+   ПОИСКОВАЯ ПАНЕЛЬ
+   ============================================= */
+.unified-search-wrapper {
+    width: 100%;
+    max-width: 600px;
+    margin-bottom: 20px;
+    background: linear-gradient(to bottom, black 30%, #690000 100%);
+    border-radius: 0px;
+}
+.search-box {
+    display: flex;
+    align-items: center;
+    height: 48px;
+    padding: 0 16px;
+    background: transparent;
+}
+.search-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 12px;
+    flex-shrink: 0;
+}
+.search-input {
+    flex-grow: 1;
+    height: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 16px;
+    color: #ffffff;
+    caret-color: #ffffff;
+}
+.search-input::placeholder {
+    color: #cccccc;
+    opacity: 1;
+}
+.search-actions {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 12px;
+}
 
-                <!-- Многослойное свечение для основного луча -->
-                <filter id="coreGlow" x="-50%" y="-50%" width="200%" height="200%">
-                    <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="blur1" />
-                    <feGaussianBlur in="SourceGraphic" stdDeviation="8" result="blur2" />
-                    <feGaussianBlur in="SourceGraphic" stdDeviation="18" result="blur3" />
-                    <feMerge>
-                        <feMergeNode in="blur3" />
-                        <feMergeNode in="blur2" />
-                        <feMergeNode in="blur1" />
-                        <feMergeNode in="SourceGraphic" />
-                    </feMerge>
-                </filter>
+/* Кнопка URL */
+.url-toggle-btn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: none;
+    border: none;
+    color: #cccccc;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+.url-toggle-btn:hover {
+    background: rgba(128, 0, 0, 0.4);   /* бордовый при наведении */
+    color: #fff;
+}
+.url-toggle-btn.active {
+    background: rgba(160, 0, 0, 0.5);   /* чуть ярче при активации */
+    border: 1px solid transparent;
+    border-image: linear-gradient(70deg, #ff0000, #000000) 1;  /* градиентная обводка */
+    box-shadow: 0 0 6px rgba(255, 0, 0, 0.5);
+    color: #fff;
+}
+.url-toggle-icon {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+}
 
-                <!-- Свечение для белой сердцевины -->
-                <filter id="threadGlow" x="-50%" y="-50%" width="200%" height="200%">
-                    <feGaussianBlur in="SourceGraphic" stdDeviation="1" result="blur1" />
-                    <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur2" />
-                    <feMerge>
-                        <feMergeNode in="blur2" />
-                        <feMergeNode in="blur1" />
-                        <feMergeNode in="SourceGraphic" />
-                    </feMerge>
-                </filter>
+/* Шестерёнка */
+.settings-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    color: #cccccc;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    transition: all 0.2s;
+    position: relative;
+}
+.settings-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+.settings-icon {
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
+}
 
-                <!-- Размытие для дымки -->
-                <filter id="fogBlur" x="-50%" y="-50%" width="200%" height="200%">
-                    <feGaussianBlur stdDeviation="50" />
-                </filter>
+/* =============================================
+   ВЫПАДАЮЩЕЕ МЕНЮ (ШЕСТЕРЁНКА)
+   ============================================= */
+.settings-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: #1a1a1a;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 0;
+    min-width: 200px;
+    z-index: 200;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    overflow: visible;
+}
+.settings-dropdown.open {
+    display: block;
+}
+.settings-dropdown button {
+    display: block;
+    width: 100%;
+    padding: 12px 16px;
+    text-align: left;
+    background: linear-gradient(to bottom, #111111 30%, #222222 100%);
+    border: none;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.2s, filter 0.2s;
+    border-radius: 0;
+}
+.settings-dropdown button:hover {
+    background: linear-gradient(to bottom, #222222 30%, #333333 100%);
+}
+.settings-dropdown hr {
+    border-color: rgba(255,255,255,0.1);
+    margin: 4px 0;
+}
 
-                <!-- Мягкое свечение для некоторых искр -->
-                <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
-                    <feGaussianBlur stdDeviation="2" />
-                </filter>
+/* Вложенная панель (Динамическая панель) */
+.settings-subpanel {
+    display: none;
+    position: absolute;
+    right: 100%;
+    top: 0;
+    background: #1a1a1a;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    min-width: 200px;
+    z-index: 210;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+}
+.settings-subpanel.show {
+    display: block;
+}
 
-                <!-- Яркое свечение для крупных бликов -->
-                <filter id="brightGlow" x="-50%" y="-50%" width="200%" height="200%">
-                    <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur" />
-                    <feMerge>
-                        <feMergeNode in="blur" />
-                        <feMergeNode in="SourceGraphic" />
-                    </feMerge>
-                </filter>
+/* Кнопка-переключатель «Включить/Выключить» */
+.dynamic-toggle-btn {
+    background: linear-gradient(to bottom, #111111 30%, #169000 100%) !important; /* зелёный (выкл) */
+    transition: background 0.3s;
+    font-weight: bold;
+}
+.dynamic-toggle-btn.enabled {
+    background: linear-gradient(to bottom, #111111 30%, #690000 100%) !important; /* красный (вкл) */
+}
 
-                <!-- Градиенты для лучей -->
-                <linearGradient id="gradRed" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stop-color="#ff0000" />
-                    <stop offset="50%" stop-color="#ff3366" />
-                    <stop offset="100%" stop-color="#cc0033" />
-                </linearGradient>
+/* =============================================
+   ПАНЕЛЬ БЫСТРЫХ ПЕРЕХОДОВ (Nexus URL Search)
+   ============================================= */
+.quick-jump-box {
+    height: 0;
+    overflow: hidden;
+    transition: height 0.3s ease, padding 0.3s ease;
+    background: transparent;
+    border-top: none;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+}
+.quick-jump-box.expanded {
+    height: 48px;
+    padding: 0 16px;
+}
+.quick-jump-input {
+    flex-grow: 1;
+    height: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 14px;
+    color: #ffffff;
+    caret-color: #ffffff;
+}
+.quick-jump-input::placeholder {
+    color: #888888;
+    opacity: 1;
+}
 
-                <linearGradient id="gradPink" x1="0%" y1="100%" x2="100%" y2="0%">
-                    <stop offset="0%" stop-color="#ff1a4d" />
-                    <stop offset="50%" stop-color="#ff4d4d" />
-                    <stop offset="100%" stop-color="#ff0066" />
-                </linearGradient>
+/* =============================================
+   ПЛИТКИ БЫСТРЫХ ССЫЛОК
+   ============================================= */
+.top-sites-section {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+}
+.top-sites-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    list-style: none;
+    padding: 0;
+}
+.top-site-outer {
+    list-style: none;
+}
+.top-site-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: #fff;
+    width: 80px;
+    padding: 8px 4px;
+    border-radius: 8px;
+    transition: background 0.2s;
+}
+.top-site-button:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+.tile {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+.tile img {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+}
+.title-label {
+    font-size: 12px;
+    text-align: center;
+    word-break: break-word;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
 
-                <linearGradient id="gradWhiteThread" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stop-color="#ffffff" stop-opacity="0.6" />
-                    <stop offset="20%" stop-color="#ffffff" stop-opacity="1" />
-                    <stop offset="80%" stop-color="#ffffff" stop-opacity="1" />
-                    <stop offset="100%" stop-color="#ffffff" stop-opacity="0.6" />
-                </linearGradient>
-            </defs>
+/* =============================================
+   КНОПКА ПЕРСОНАЛИЗАЦИИ (СТАРАЯ)
+   ============================================= */
+.personalize-button {
+    position: fixed;
+    top: 12px;
+    right: 130px;
+    background: rgba(0, 0, 0, 0.4);
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    padding: 6px 12px;
+    cursor: pointer;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.personalize-button:hover {
+    background: rgba(0, 0, 0, 0.6);
+}
+.personalize-button img {
+    width: 16px;
+    height: 16px;
+    filter: invert(1);
+}
+.customize-menu {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #2a2a3e;
+    color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    z-index: 1000;
+    min-width: 300px;
+}
+.customize-menu.open {
+    display: block;
+}
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+.overlay.open {
+    display: block;
+}
 
-            <!-- Глубинная дымка -->
-            <ellipse class="fog" cx="1400" cy="750" rx="400" ry="250" />
-            <ellipse class="fog" cx="200" cy="150" rx="300" ry="220" />
-            <ellipse class="fog" cx="800" cy="450" rx="450" ry="280" />
-
-            <!-- === Фоновые размытые лучи (увеличенная толщина, выход за кадр) === -->
-            <g class="laser-blur">
-                <path class="laser" d="M 1520 920 C 1200 600, 700 850, 50 -20" stroke="#ff0000" stroke-width="20" />
-                <path class="laser" d="M 1600 900 C 1000 480, 900 950, -20 120" stroke="#ff0044" stroke-width="24" />
-                <path class="laser" d="M 1480 950 C 1100 680, 600 820, -20 -10" stroke="#cc0033" stroke-width="17" />
-            </g>
-
-            <!-- === Основные лазерные лучи === -->
-            <g class="laser-core">
-                <path class="laser" d="M 1600 860 C 1250 700, 750 800, 50 -20" stroke="url(#gradRed)"
-                    stroke-width="5" />
-            </g>
-            <path class="laser laser-thread" d="M 1600 860 C 1250 700, 750 800, 50 -20" stroke="url(#gradWhiteThread)"
-                stroke-width="1.3" />
-
-            <g class="laser-core">
-                <path class="laser" d="M 1600 830 C 1100 450, 920 980, -20 140" stroke="url(#gradPink)"
-                    stroke-width="3.8" />
-            </g>
-            <path class="laser laser-thread" d="M 1600 830 C 1100 450, 920 980, -20 140" stroke="url(#gradWhiteThread)"
-                stroke-width="1.0" />
-
-            <g class="laser-core">
-                <path class="laser" d="M 1550 920 C 1050 660, 720 840, -20 -10" stroke="#ff3333" stroke-width="2.4" />
-            </g>
-
-            <g class="laser-core">
-                <path class="laser" d="M 1640 810 C 1350 920, 480 280, -20 70" stroke="url(#gradRed)" stroke-width="3.3"
-                    opacity="0.7" />
-            </g>
-
-            <g class="laser-core">
-                <path class="laser" d="M 1620 760 C 1200 560, 620 960, -20 220" stroke="#ff1a1a" stroke-width="2.2"
-                    opacity="0.5" />
-            </g>
-
-            <!-- === Искры и микрочастицы === -->
-            <g class="spark-bright" fill="#ffffff" opacity="0.9">
-                <circle cx="1600" cy="860" r="3" />
-                <circle cx="1600" cy="830" r="2.5" />
-                <circle cx="1550" cy="920" r="2.2" />
-                <circle cx="50" cy="-20" r="3" />
-                <circle cx="-20" cy="140" r="2.5" />
-                <circle cx="-20" cy="-10" r="2.2" />
-            </g>
-
-            <g class="spark" fill="#ff4d4d">
-                <circle cx="1450" cy="800" r="2.8" />
-                <circle cx="1200" cy="720" r="1.6" />
-                <circle cx="1000" cy="660" r="2.2" />
-                <circle cx="800" cy="630" r="1.9" />
-                <circle cx="560" cy="570" r="1.4" />
-                <circle cx="320" cy="440" r="2.5" />
-                <circle cx="200" cy="300" r="1.7" />
-                <circle cx="110" cy="130" r="1.2" />
-
-                <circle cx="1480" cy="820" r="2.0" />
-                <circle cx="1300" cy="690" r="1.5" />
-                <circle cx="1080" cy="510" r="2.6" />
-                <circle cx="900" cy="640" r="1.7" />
-                <circle cx="720" cy="800" r="2.2" />
-                <circle cx="520" cy="900" r="1.9" />
-                <circle cx="320" cy="780" r="1.2" />
-                <circle cx="170" cy="500" r="1.8" />
-                <circle cx="100" cy="220" r="1.4" />
-
-                <circle cx="1400" cy="870" r="1.8" />
-                <circle cx="1180" cy="790" r="1.3" />
-                <circle cx="950" cy="720" r="2.0" />
-                <circle cx="700" cy="660" r="1.5" />
-                <circle cx="450" cy="550" r="1.1" />
-                <circle cx="250" cy="400" r="1.6" />
-                <circle cx="180" cy="250" r="1.0" />
-            </g>
-
-            <g class="spark-soft" fill="#ff6666" opacity="0.6">
-                <circle cx="1350" cy="780" r="3.5" />
-                <circle cx="1050" cy="690" r="4.0" />
-                <circle cx="850" cy="620" r="2.8" />
-                <circle cx="650" cy="580" r="3.2" />
-                <circle cx="400" cy="500" r="4.5" />
-                <circle cx="220" cy="350" r="3.0" />
-                <circle cx="1150" cy="830" r="3.8" />
-                <circle cx="900" cy="750" r="2.5" />
-                <circle cx="600" cy="850" r="4.0" />
-                <circle cx="350" cy="700" r="3.3" />
-            </g>
-
-            <g class="spark" fill="#ff3333" opacity="0.8">
-                <circle cx="620" cy="180" r="1.7" />
-                <circle cx="1150" cy="280" r="2.0" />
-                <circle cx="1450" cy="430" r="1.2" />
-                <circle cx="180" cy="620" r="2.8" />
-                <circle cx="880" cy="140" r="1.5" />
-                <circle cx="1350" cy="890" r="2.2" />
-                <circle cx="480" cy="810" r="1.6" />
-                <circle cx="750" cy="200" r="1.4" />
-                <circle cx="1080" cy="380" r="1.9" />
-                <circle cx="280" cy="850" r="2.3" />
-                <circle cx="1520" cy="600" r="1.3" />
-                <circle cx="920" cy="480" r="1.1" />
-            </g>
-
-            <g fill="#ff8080" opacity="0.7" filter="url(#softGlow)">
-                <polygon points="1100,300 1102,296 1104,300 1102,304" />
-                <polygon points="800,500 802,496 804,500 802,504" />
-                <polygon points="600,700 602,696 604,700 602,704" />
-                <polygon points="300,200 302,196 304,200 302,204" />
-                <polygon points="1300,600 1302,596 1304,600 1302,604" />
-                <polygon points="950,400 952,396 954,400 952,404" />
-                <polygon points="400,350 402,346 404,350 402,354" />
-                <polygon points="700,150 702,146 704,150 702,154" />
-            </g>
-
-            <g fill="#ffffff" filter="url(#brightGlow)" opacity="0.9">
-                <circle cx="1200" cy="750" r="2.0" />
-                <circle cx="900" cy="550" r="2.5" />
-                <circle cx="550" cy="650" r="1.8" />
-                <circle cx="250" cy="450" r="2.2" />
-                <circle cx="1400" cy="500" r="1.5" />
-                <circle cx="1000" cy="200" r="1.7" />
-            </g>
-        </svg>
-    </div>
-
-    <!-- Основной контент (поверх фона) -->
-    <!-- Погодный виджет -->
-    <div class="weather-widget" id="weather-widget">
-        <span class="weather-icon" id="weather-icon"></span>
-        <span class="temp" id="weather-temp">--°</span>
-        <span class="desc" id="weather-desc">Загрузка...</span>
-    </div>
-
-    <div class="outer-wrapper">
-        <!-- Логотип Nexus -->
-        <div class="logo-and-wordmark-wrapper">
-            <div class="logo-and-wordmark">
-                <img class="logo-icon" src="NexusLogoV1.png" alt="Nexus Logo">
-                <span class="logo-text">Nexus</span>
-            </div>
-        </div>
-
-        <!-- Объединённая поисковая секция -->
-        <div class="unified-search-wrapper">
-            <div class="search-box">
-                <img class="search-icon"
-                    src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iI2NjY2NjYyI+PHBhdGggZD0iTTE1LjUgMTRoLS43OWwtLjI4LS4yN0MxNS40MSAxMi41OSAxNiAxMS4xMSAxNiA5LjUgMTYgNS45MSAxMy4wOSAzIDkuNSAzUzMgNS45MSAzIDkuNSA1LjkxIDE2IDkuNSAxNmMxLjYxIDAgMy4wOS0uNTkgNC4yMy0xLjU3bC4yNy4yOHYuNzlsNSA0Ljk5TDIwLjQ5IDE5bC00Ljk5LTV6bS02IDBDNy4wMSAxNCA1IDExLjk5IDUgOS41UzcuMDEgNSA5LjUgNSAxNCA3LjAxIDE0IDkuNSAxMS45OSAxNCA5LjUgMTR6Ii8+PC9zdmc+"
-                    alt="Search">
-                <input class="search-input" type="text" placeholder="Nexus Search" id="search-input"
-                    title="На основе DuckDuckGo">
-                <div class="search-actions">
-                    <button class="url-toggle-btn" id="url-toggle-btn" title="Включить режим поиска по URL">
-                        <svg class="url-toggle-icon" viewBox="0 0 24 24">
-                            <path
-                                d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
-                        </svg>
-                        <span>URL</span>
-                    </button>
-                    <button class="settings-btn" id="settings-btn" title="Настройки">
-                        <svg class="settings-icon" viewBox="0 0 24 24">
-                            <path
-                                d="M19.14 12.94c.04-.31.06-.63.06-.94 0-.31-.02-.63-.06-.94l2.03-1.58c.18-.14.23-.38.12-.56l-1.89-3.28c-.12-.19-.36-.26-.56-.18l-2.38.96c-.5-.38-1.06-.68-1.66-.88L14.72 3.3c-.04-.2-.2-.34-.4-.34h-3.78c-.2 0-.36.14-.4.34l-.26 2.38c-.6.2-1.16.5-1.66.88l-2.38-.96c-.2-.08-.44-.01-.56.18l-1.89 3.28c-.12.19-.07.42.12.56l2.03 1.58c-.04.31-.06.63-.06.94 0 .31.02.63.06.94l-2.03 1.58c-.18.14-.23.38-.12.56l1.89 3.28c.12.19.36.26.56.18l2.38-.96c.5.38 1.06.68 1.66.88l.26 2.38c.04.2.2.34.4.34h3.78c.2 0 .36-.14.4-.34l.26-2.38c.6-.2 1.16-.5 1.66-.88l2.38.96c.2.08.44.01.56-.18l1.89-3.28c.12-.19.07-.42-.12-.56l-2.03-1.58zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z" />
-                        </svg>
-                    </button>
-                    <div class="settings-dropdown" id="settings-dropdown">
-                        <!-- Динамическая панель (кнопка) -->
-                        <button id="dynamic-panel-btn">Динамическая панель</button>
-                        <!-- Вложенная панель (показывается при клике на кнопку выше) -->
-                        <div class="settings-subpanel" id="dynamic-subpanel">
-                            <button id="dynamic-toggle" class="dynamic-toggle-btn">Включить</button>
-                            <button id="reset-panel">Сбросить положение панели</button>
-                        </div>
-                        <hr>
-                        <button>Тест 2</button>
-                        <button>Тест 3</button>
-                    </div>
-                </div>
-            </div>
-            <div class="quick-jump-box" id="quick-jump-box">
-                <input class="quick-jump-input" type="text" placeholder="Nexus URL Search" id="quick-jump-input"
-                    title="Введи команду или URL">
-            </div>
-        </div>
-
-        <!-- Плитки -->
-        <div class="top-sites-section">
-            <ul class="top-sites-list">
-                <li class="top-site-outer">
-                    <a class="top-site-button" href="https://www.deepseek.com/">
-                        <div class="tile">
-                            <img src="https://www.deepseek.com/favicon.ico" alt="DeepSeek">
-                        </div>
-                        <span class="title-label">DeepSeek</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
-
-    <!-- Кнопка персонализации (старая) -->
-    <button class="personalize-button" id="personalize-btn">
-        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0id2hpdGUiPjxwYXRoIGQ9Ik0zIDE3LjI1VjIxaDMuNzVMMTcuODEgOS45NGwtMy43NS0zLjc1TDMgMTcuMjV6TTIwLjcxIDcuMDRjLjM5LS4zOS4zOS0xLjAyIDAtMS40MWwtMi4zNC0yLjM0Yy0uMzktLjM5LTEuMDItLjM5LTEuNDEgMGwtMS44MyAxLjgzIDMuNzUgMy43NSAxLjgzLTEuODN6Ii8+PC9zdmc+"
-            alt="">
-        Персонализация
-    </button>
-
-    <div class="overlay" id="overlay"></div>
-    <div class="customize-menu" id="customize-menu">
-        <h3>Настройки</h3>
-        <p>Здесь можно добавить свои настройки.</p>
-        <button id="close-settings-btn">Закрыть</button>
-    </div>
-
-    <!-- Скрипты -->
-    <script src="script.js"></script>
-</body>
-
-</html>
+/* =============================================
+   ПЕРЕТАСКИВАНИЕ ПАНЕЛИ (draggable)
+   ============================================= */
+.unified-search-wrapper.draggable {
+    cursor: grab;
+    user-select: none;
+}
