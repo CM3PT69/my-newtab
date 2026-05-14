@@ -1,54 +1,76 @@
 <!DOCTYPE html>
 <html lang="ru" dir="ltr">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Nexus New-Tab V3.3.4</title>
+    <title>Nexus New-Tab V3.4</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        html, body {
+
+        html,
+        body {
             height: 100%;
             font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
             color: #fff;
         }
+
         body {
-            /* Основной градиент: чёрный -> тёмно-красный -> глубокий красный */
-            background: linear-gradient(135deg, #0a0a0a 0%, #0f001f 30%, #1d003d 60%, #0a0a0a 100%);
-            background-attachment: fixed;
+            /* Фон с двумя диагональными переплетающимися полосами */
+            background: linear-gradient(135deg,
+                    #1a0000 0%,
+                    /* тёмный край слева-сверху */
+                    #8b0000 25%,
+                    /* тёмно-красный */
+                    #1a0000 50%,
+                    /* чёрный центр */
+                    #8b0000 75%,
+                    /* тёмно-красный */
+                    #1a0000 100%
+                    /* тёмный край справа-снизу */
+                ),
+                repeating-linear-gradient(-45deg,
+                    transparent,
+                    transparent 40px,
+                    rgba(200, 0, 0, 0.15) 40px,
+                    rgba(200, 0, 0, 0.15) 42px),
+                repeating-linear-gradient(45deg,
+                    transparent,
+                    transparent 40px,
+                    rgba(0, 0, 0, 0.3) 40px,
+                    rgba(0, 0, 0, 0.3) 42px);
+            background-blend-mode: overlay;
+
+            /* Крупные буквы Nx на фоне */
+            position: relative;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: flex-start;
             padding-top: 8vh;
-            position: relative;
-            overflow-x: hidden;
+            min-height: 100vh;
+            font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+            color: #fff;
         }
 
-        /* 3D-полосы (поверх фона, снизу-справа наверх-влево) */
+        /* Буквы Nx на фоне (псевдоэлемент) */
         body::before {
-            content: "";
+            content: "Nx";
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;  /* чтобы не мешал кликать */
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 25vw;
+            font-weight: 900;
+            color: rgba(180, 0, 0, 0.15);
+            pointer-events: none;
             z-index: 0;
-            background: repeating-linear-gradient(
-                -45deg,                       /* угол: от правого нижнего к левому верхнему */
-                transparent,                  /* начало полосы */
-                transparent 8px,              /* ширина прозрачной части */
-                rgba(220, 20, 60, 0.25) 8px,  /* начало видимой части */
-                rgba(220, 20, 60, 0.25) 12px  /* конец видимой части */
-            );
-            /* 3D-эффект: тени по краям полос */
-            box-shadow: 
-                inset 0 0 60px rgba(0,0,0,0.8),   /* затемнение по краям экрана */
-                inset 0 0 20px rgba(220,20,60,0.4);
+            font-family: "Impact", "Arial Black", sans-serif;
+            text-shadow: 0 0 100px rgba(255, 0, 0, 0.2);
         }
 
         /* Погодный виджет */
@@ -67,13 +89,16 @@
             color: #fff;
             z-index: 100;
         }
+
         .weather-widget .temp {
             font-size: 22px;
             font-weight: bold;
         }
+
         .weather-widget .desc {
             text-transform: capitalize;
         }
+
         .weather-icon {
             font-size: 28px;
         }
@@ -85,8 +110,6 @@
             width: 100%;
             max-width: 1200px;
             padding: 0 20px;
-            position: relative;
-            z-index: 1;  /* чтобы контент был над полосами */
         }
 
         /* Логотип */
@@ -95,16 +118,19 @@
             justify-content: center;
             margin-bottom: 30px;
         }
+
         .logo-and-wordmark {
             display: flex;
             align-items: center;
             gap: 10px;
         }
+
         .logo-icon {
             width: 36px;
             height: 36px;
             object-fit: contain;
         }
+
         .logo-text {
             font-size: 26px;
             font-weight: bold;
@@ -118,10 +144,9 @@
             width: 100%;
             max-width: 600px;
             margin-bottom: 30px;
-            background: linear-gradient(to bottom, black 30%, #2d1538 100%);
+            background: linear-gradient(to bottom, black 30%, #690700 100%);
             border-radius: 0px;
-            position: relative;
-            z-index: 2;
+            /* overflow: hidden;  убрали, чтобы меню не обрезалось */
         }
 
         /* Верхняя строка (основной поиск + кнопки) */
@@ -132,12 +157,14 @@
             padding: 0 16px;
             background: transparent;
         }
+
         .search-icon {
             width: 24px;
             height: 24px;
             margin-right: 12px;
             flex-shrink: 0;
         }
+
         .search-input {
             flex-grow: 1;
             height: 100%;
@@ -148,6 +175,7 @@
             color: #ffffff;
             caret-color: #ffffff;
         }
+
         .search-input::placeholder {
             color: #cccccc;
             opacity: 1;
@@ -156,11 +184,13 @@
         /* Кнопки в правой части поисковой строки */
         .search-actions {
             position: relative;
+            /* чтобы выпадашка позиционировалась относительно этого блока */
             display: flex;
             align-items: center;
             gap: 8px;
             margin-left: 12px;
         }
+
         .url-toggle-btn {
             display: flex;
             align-items: center;
@@ -174,19 +204,23 @@
             border-radius: 4px;
             transition: all 0.2s;
         }
+
         .url-toggle-btn:hover {
             background: rgba(255, 255, 255, 0.1);
             color: #fff;
         }
+
         .url-toggle-btn.active {
             background: rgba(255, 255, 255, 0.2);
             color: #fff;
         }
+
         .url-toggle-icon {
             width: 16px;
             height: 16px;
             fill: currentColor;
         }
+
         .settings-btn {
             display: flex;
             align-items: center;
@@ -200,33 +234,38 @@
             transition: all 0.2s;
             position: relative;
         }
+
         .settings-btn:hover {
             background: rgba(255, 255, 255, 0.1);
             color: #fff;
         }
+
         .settings-icon {
             width: 20px;
             height: 20px;
             fill: currentColor;
         }
 
-        /* Выпадающее меню настроек (шестерёнки) */
+        /* Выпадающее меню настроек (шестерёнки) — окончательный вариант */
         .settings-dropdown {
             display: none;
             position: absolute;
             top: 100%;
+            /* сразу под кнопкой */
             right: 0;
             background: rgb(69, 69, 69);
             border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 8px;
             min-width: 160px;
             z-index: 200;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
             overflow: hidden;
         }
+
         .settings-dropdown.open {
             display: block;
         }
+
         .settings-dropdown button {
             display: block;
             width: 100%;
@@ -239,6 +278,7 @@
             cursor: pointer;
             transition: background 0.2s;
         }
+
         .settings-dropdown button:hover {
             background: rgba(255, 255, 255, 0.15);
         }
@@ -253,10 +293,12 @@
             align-items: center;
             padding: 0 16px;
         }
+
         .quick-jump-box.expanded {
             height: 48px;
             padding: 0 16px;
         }
+
         .quick-jump-input {
             flex-grow: 1;
             height: 100%;
@@ -267,6 +309,7 @@
             color: #ffffff;
             caret-color: #ffffff;
         }
+
         .quick-jump-input::placeholder {
             color: #888888;
             opacity: 1;
@@ -277,9 +320,8 @@
             width: 100%;
             max-width: 800px;
             margin: 0 auto;
-            position: relative;
-            z-index: 1;
         }
+
         .top-sites-list {
             display: flex;
             flex-wrap: wrap;
@@ -288,9 +330,11 @@
             list-style: none;
             padding: 0;
         }
+
         .top-site-outer {
             list-style: none;
         }
+
         .top-site-button {
             display: flex;
             flex-direction: column;
@@ -303,9 +347,11 @@
             border-radius: 8px;
             transition: background 0.2s;
         }
+
         .top-site-button:hover {
             background: rgba(255, 255, 255, 0.1);
         }
+
         .tile {
             width: 48px;
             height: 48px;
@@ -316,11 +362,13 @@
             justify-content: center;
             overflow: hidden;
         }
+
         .tile img {
             width: 32px;
             height: 32px;
             object-fit: contain;
         }
+
         .title-label {
             font-size: 12px;
             text-align: center;
@@ -331,7 +379,7 @@
             white-space: nowrap;
         }
 
-        /* Кнопка персонализации */
+        /* Кнопка персонализации (старая) */
         .personalize-button {
             position: fixed;
             top: 12px;
@@ -346,16 +394,18 @@
             display: flex;
             align-items: center;
             gap: 6px;
-            z-index: 100;
         }
+
         .personalize-button:hover {
             background: rgba(0, 0, 0, 0.6);
         }
+
         .personalize-button img {
             width: 16px;
             height: 16px;
             filter: invert(1);
         }
+
         .customize-menu {
             display: none;
             position: fixed;
@@ -369,9 +419,11 @@
             z-index: 1000;
             min-width: 300px;
         }
+
         .customize-menu.open {
             display: block;
         }
+
         .overlay {
             display: none;
             position: fixed;
@@ -382,11 +434,13 @@
             background: rgba(0, 0, 0, 0.5);
             z-index: 999;
         }
+
         .overlay.open {
             display: block;
         }
     </style>
 </head>
+
 <body>
 
     <!-- Погодный виджет -->
@@ -409,17 +463,26 @@
         <div class="unified-search-wrapper">
             <!-- Верхняя строка (основной поиск + кнопки) -->
             <div class="search-box">
-                <img class="search-icon" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iI2NjY2NjYyI+PHBhdGggZD0iTTE1LjUgMTRoLS43OWwtLjI4LS4yN0MxNS40MSAxMi41OSAxNiAxMS4xMSAxNiA5LjUgMTYgNS45MSAxMy4wOSAzIDkuNSAzUzMgNS45MSAzIDkuNSA1LjkxIDE2IDkuNSAxNmMxLjYxIDAgMy4wOS0uNTkgNC4yMy0xLjU3bC4yNy4yOHYuNzlsNSA0Ljk5TDIwLjQ5IDE5bC00Ljk5LTV6bS02IDBDNy4wMSAxNCA1IDExLjk5IDUgOS41UzcuMDEgNSA5LjUgNSAxNCA3LjAxIDE0IDkuNSAxMS45OSAxNCA5LjUgMTR6Ii8+PC9zdmc+" alt="Search">
-                <input class="search-input" type="text" placeholder="Nexus Search" id="search-input" title="На основе DuckDuckGo">
+                <img class="search-icon"
+                    src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iI2NjY2NjYyI+PHBhdGggZD0iTTE1LjUgMTRoLS43OWwtLjI4LS4yN0MxNS40MSAxMi41OSAxNiAxMS4xMSAxNiA5LjUgMTYgNS45MSAxMy4wOSAzIDkuNSAzUzMgNS45MSAzIDkuNSA1LjkxIDE2IDkuNSAxNmMxLjYxIDAgMy4wOS0uNTkgNC4yMy0xLjU3bC4yNy4yOHYuNzlsNSA0Ljk5TDIwLjQ5IDE5bC00Ljk5LTV6bS02IDBDNy4wMSAxNCA1IDExLjk5IDUgOS41UzcuMDEgNSA5LjUgNSAxNCA3LjAxIDE0IDkuNSAxMS45OSAxNCA5LjUgMTR6Ii8+PC9zdmc+"
+                    alt="Search">
+                <input class="search-input" type="text" placeholder="Nexus Search" id="search-input"
+                    title="На основе DuckDuckGo">
                 <div class="search-actions">
                     <!-- Кнопка включения панели URL -->
                     <button class="url-toggle-btn" id="url-toggle-btn" title="Включить режим поиска по URL">
-                        <svg class="url-toggle-icon" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                        <svg class="url-toggle-icon" viewBox="0 0 24 24">
+                            <path
+                                d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
+                        </svg>
                         <span>URL</span>
                     </button>
                     <!-- Шестерёнка -->
                     <button class="settings-btn" id="settings-btn" title="Настройки">
-                        <svg class="settings-icon" viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.31.06-.63.06-.94 0-.31-.02-.63-.06-.94l2.03-1.58c.18-.14.23-.38.12-.56l-1.89-3.28c-.12-.19-.36-.26-.56-.18l-2.38.96c-.5-.38-1.06-.68-1.66-.88L14.72 3.3c-.04-.2-.2-.34-.4-.34h-3.78c-.2 0-.36.14-.4.34l-.26 2.38c-.6.2-1.16.5-1.66.88l-2.38-.96c-.2-.08-.44-.01-.56.18l-1.89 3.28c-.12.19-.07.42.12.56l2.03 1.58c-.04.31-.06.63-.06.94 0 .31.02.63.06.94l-2.03 1.58c-.18.14-.23.38-.12.56l1.89 3.28c.12.19.36.26.56.18l2.38-.96c.5.38 1.06.68 1.66.88l.26 2.38c.04.2.2.34.4.34h3.78c.2 0 .36-.14.4-.34l.26-2.38c.6-.2 1.16-.5 1.66-.88l2.38.96c.2.08.44.01.56-.18l1.89-3.28c.12-.19.07-.42-.12-.56l-2.03-1.58zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/></svg>
+                        <svg class="settings-icon" viewBox="0 0 24 24">
+                            <path
+                                d="M19.14 12.94c.04-.31.06-.63.06-.94 0-.31-.02-.63-.06-.94l2.03-1.58c.18-.14.23-.38.12-.56l-1.89-3.28c-.12-.19-.36-.26-.56-.18l-2.38.96c-.5-.38-1.06-.68-1.66-.88L14.72 3.3c-.04-.2-.2-.34-.4-.34h-3.78c-.2 0-.36.14-.4.34l-.26 2.38c-.6.2-1.16.5-1.66.88l-2.38-.96c-.2-.08-.44-.01-.56.18l-1.89 3.28c-.12.19-.07.42.12.56l2.03 1.58c-.04.31-.06.63-.06.94 0 .31.02.63.06.94l-2.03 1.58c-.18.14-.23.38-.12.56l1.89 3.28c.12.19.36.26.56.18l2.38-.96c.5.38 1.06.68 1.66.88l.26 2.38c.04.2.2.34.4.34h3.78c.2 0 .36-.14.4-.34l.26-2.38c.6-.2 1.16-.5 1.66-.88l2.38.96c.2.08.44.01.56-.18l1.89-3.28c.12-.19.07-.42-.12-.56l-2.03-1.58zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z" />
+                        </svg>
                     </button>
                     <!-- Выпадающее меню (вне кнопки) -->
                     <div class="settings-dropdown" id="settings-dropdown">
@@ -431,10 +494,10 @@
             </div>
             <!-- Нижняя панель (быстрые переходы) -->
             <div class="quick-jump-box" id="quick-jump-box">
-                <input class="quick-jump-input" type="text" placeholder="Nexus URL Search" id="quick-jump-input" title="Введи команду или URL">
+                <input class="quick-jump-input" type="text" placeholder="Nexus URL Search" id="quick-jump-input"
+                    title="Введи команду или URL">
             </div>
         </div>
-
         <!-- Плитки -->
         <div class="top-sites-section">
             <ul class="top-sites-list">
@@ -446,13 +509,15 @@
                         <span class="title-label">DeepSeek</span>
                     </a>
                 </li>
+                <!-- Добавляй свои сайты по шаблону -->
             </ul>
         </div>
     </div>
 
-    <!-- Кнопка персонализации -->
+    <!-- Кнопка персонализации (старая) -->
     <button class="personalize-button" id="personalize-btn">
-        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0id2hpdGUiPjxwYXRoIGQ9Ik0zIDE3LjI1VjIxaDMuNzVMMTcuODEgOS45NGwtMy43NS0zLjc1TDMgMTcuMjV6TTIwLjcxIDcuMDRjLjM5LS4zOS4zOS0xLjAyIDAtMS40MWwtMi4zNC0yLjM0Yy0uMzktLjM5LTEuMDItLjM5LTEuNDEgMGwtMS44MyAxLjgzIDMuNzUgMy43NSAxLjgzLTEuODN6Ii8+PC9zdmc+" alt="">
+        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0id2hpdGUiPjxwYXRoIGQ9Ik0zIDE3LjI1VjIxaDMuNzVMMTcuODEgOS45NGwtMy43NS0zLjc1TDMgMTcuMjV6TTIwLjcxIDcuMDRjLjM5LS4zOS4zOS0xLjAyIDAtMS40MWwtMi4zNC0yLjM0Yy0uMzktLjM5LTEuMDItLjM5LTEuNDEgMGwtMS44MyAxLjgzIDMuNzUgMy43NSAxLjgzLTEuODN6Ii8+PC9zdmc+"
+            alt="">
         Персонализация
     </button>
 
@@ -507,7 +572,7 @@
 
         // === ПОИСК (основной) ===
         const searchInput = document.getElementById('search-input');
-        searchInput.addEventListener('keypress', function(e) {
+        searchInput.addEventListener('keypress', function (e) {
             if (e.key === 'Enter') {
                 const query = encodeURIComponent(this.value.trim());
                 if (query) {
@@ -543,7 +608,7 @@
             'rdt': (query) => query ? `https://www.reddit.com/search/?q=${encodeURIComponent(query)}` : 'https://www.reddit.com',
         };
 
-        quickJumpInput.addEventListener('keypress', function(e) {
+        quickJumpInput.addEventListener('keypress', function (e) {
             if (e.key === 'Enter') {
                 const raw = this.value.trim();
                 if (!raw) return;
@@ -569,10 +634,11 @@
         const settingsDropdown = document.getElementById('settings-dropdown');
 
         settingsBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
+            e.stopPropagation(); // чтобы клик не закрыл меню сразу
             settingsDropdown.classList.toggle('open');
         });
 
+        // Закрытие меню при клике вне
         document.addEventListener('click', (e) => {
             if (!settingsBtn.contains(e.target)) {
                 settingsDropdown.classList.remove('open');
@@ -599,4 +665,5 @@
         closeSettingsBtn.addEventListener('click', closeSettings);
     </script>
 </body>
+
 </html>
