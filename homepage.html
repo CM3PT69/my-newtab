@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="ru" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>GenZH — Новая вкладка</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html, body {
+            height: 100%;
+            font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+            color: #fff;
+        }
+        body {
+            background-image: url('https://firefox-settings-attachments.cdn.mozilla.net/main-workspace/newtab-wallpapers-v2/0b039df1-971b-445a-84f6-6a15da08940e.svg');
+            background-position: bottom center;
+            background-size: cover;
+            background-attachment: fixed;
+            background-color: #1a1a2e;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding-top: 8vh;
+            position: relative;
+        }
+        .weather-widget {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            background: rgba(0, 0, 0, 0.55);
+            backdrop-filter: blur(8px);
+            border-radius: 12px;
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            color: #fff;
+            z-index: 100;
+        }
+        .weather-widget .temp {
+            font-size: 22px;
+            font-weight: bold;
+        }
+        .weather-widget .desc {
+            text-transform: capitalize;
+        }
+        .weather-icon {
+            font-size: 28px;
+        }
+        .outer-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 1200px;
+            padding: 0 20px;
+        }
+        .logo-and-wordmark-wrapper {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            object-fit: contain;
+        }
+        .search-wrapper {
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 30px;
+        }
+        .search-box {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            height: 48px;
+            border-radius: 0px;
+            background: linear-gradient(to bottom, black 30%, #2d1538 100%);
+            padding: 0 16px;
+        }
+        .search-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        .search-input {
+            flex-grow: 1;
+            height: 100%;
+            border: none;
+            outline: none;
+            background: transparent;
+            font-size: 16px;
+            color: #ffffff;
+            caret-color: #ffffff;
+        }
+        .search-input::placeholder {
+            color: #cccccc;
+            opacity: 1;
+        }
+        .top-sites-section {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .top-sites-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            list-style: none;
+            padding: 0;
+        }
+        .top-site-outer {
+            list-style: none;
+        }
+        .top-site-button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: #fff;
+            width: 80px;
+            padding: 8px 4px;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+        .top-site-button:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        .tile {
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .tile img {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+        }
+        .title-label {
+            font-size: 12px;
+            text-align: center;
+            word-break: break-word;
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .personalize-button {
+            position: fixed;
+            top: 12px;
+            right: 130px;
+            background: rgba(0, 0, 0, 0.4);
+            border: none;
+            border-radius: 4px;
+            color: #fff;
+            padding: 6px 12px;
+            cursor: pointer;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .personalize-button:hover {
+            background: rgba(0, 0, 0, 0.6);
+        }
+        .personalize-button img {
+            width: 16px;
+            height: 16px;
+            filter: invert(1);
+        }
+        .customize-menu {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #2a2a3e;
+            color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            z-index: 1000;
+            min-width: 300px;
+        }
+        .customize-menu.open {
+            display: block;
+        }
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+        .overlay.open {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Погодный виджет -->
+    <div class="weather-widget" id="weather-widget">
+        <span class="weather-icon" id="weather-icon"></span>
+        <span class="temp" id="weather-temp">--°</span>
+        <span class="desc" id="weather-desc">Загрузка...</span>
+    </div>
+
+    <div class="outer-wrapper">
+        <!-- Логотип NexusLogoV1 (встроенный base64, заменишь на свой) -->
+        <div class="logo-and-wordmark-wrapper">
+            <img class="logo-icon" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0MCIgZmlsbD0iI2ZmNmI5ZCIvPjx0ZXh0IHg9IjUwIiB5PSI2NSIgZm9udC1zaXplPSI0MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0id2hpdGUiIGZvbnQtd2VpZ2h0PSJib2xkIj5OPC90ZXh0Pjwvc3ZnPg==" alt="Nexus Logo">
+        </div>
+
+        <!-- Поисковая строка с иконкой GenZH (встроенная) -->
+        <div class="search-wrapper">
+            <div class="search-box">
+                <img class="search-icon" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iI2NjY2NjYyI+PHBhdGggZD0iTTE1LjUgMTRoLS43OWwtLjI4LS4yN0MxNS40MSAxMi41OSAxNiAxMS4xMSAxNiA5LjUgMTYgNS45MSAxMy4wOSAzIDkuNSAzUzMgNS45MSAzIDkuNSA1LjkxIDE2IDkuNSAxNmMxLjYxIDAgMy4wOS0uNTkgNC4yMy0xLjU3bC4yNy4yOHYuNzlsNSA0Ljk5TDIwLjQ5IDE5bC00Ljk5LTV6bS02IDBDNy4wMSAxNCA1IDExLjk5IDUgOS41UzcuMDEgNSA5LjUgNSAxNCA3LjAxIDE0IDkuNSAxMS45OSAxNCA5LjUgMTR6Ii8+PC9zdmc+" alt="Search">
+                <input class="search-input" type="text" placeholder="Поск" id="search-input">
+            </div>
+        </div>
+
+        <!-- Плитки -->
+        <div class="top-sites-section">
+            <ul class="top-sites-list">
+                <li class="top-site-outer">
+                    <a class="top-site-button" href="https://www.deepseek.com/">
+                        <div class="tile">
+                            <img src="https://www.deepseek.com/favicon.ico" alt="DeepSeek">
+                        </div>
+                        <span class="title-label">DeepSeek</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Кнопка персонализации -->
+    <button class="personalize-button" id="personalize-btn">
+        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0id2hpdGUiPjxwYXRoIGQ9Ik0zIDE3LjI1VjIxaDMuNzVMMTcuODEgOS45NGwtMy43NS0zLjc1TDMgMTcuMjV6TTIwLjcxIDcuMDRjLjM5LS4zOS4zOS0xLjAyIDAtMS40MWwtMi4zNC0yLjM0Yy0uMzktLjM5LTEuMDItLjM5LTEuNDEgMGwtMS44MyAxLjgzIDMuNzUgMy43NSAxLjgzLTEuODN6Ii8+PC9zdmc+" alt="">
+        Персонализация
+    </button>
+
+    <div class="overlay" id="overlay"></div>
+    <div class="customize-menu" id="customize-menu">
+        <h3>Настройки</h3>
+        <p>Здесь можно добавить свои настройки.</p>
+        <button id="close-settings-btn">Закрыть</button>
+    </div>
+
+    <script>
+        // === ПОГОДА ===
+        async function fetchWeather() {
+            const lat = 52.48766;
+            const lon = 32.91671;
+            const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`;
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('Сетевая ошибка');
+                const data = await response.json();
+                const weather = data.current_weather;
+                document.getElementById('weather-temp').textContent = `${Math.round(weather.temperature)}°C`;
+                const code = weather.weathercode;
+                const descriptions = {
+                    0: 'Ясно', 1: 'Преимущественно ясно', 2: 'Переменная облачность', 3: 'Пасмурно',
+                    45: 'Туман', 48: 'Изморозь',
+                    51: 'Лёгкая морось', 53: 'Умеренная морось', 55: 'Сильная морось',
+                    61: 'Небольшой дождь', 63: 'Умеренный дождь', 65: 'Сильный дождь',
+                    71: 'Небольшой снег', 73: 'Умеренный снег', 75: 'Сильный снег',
+                    80: 'Ливень', 81: 'Умеренный ливень', 82: 'Сильный ливень',
+                    95: 'Гроза', 96: 'Гроза с мелким градом', 99: 'Гроза с крупным градом'
+                };
+                document.getElementById('weather-desc').textContent = descriptions[code] || 'Неизвестно';
+                const emojiMap = {
+                    0: '☀️', 1: '🌤️', 2: '⛅', 3: '☁️',
+                    45: '🌫️', 48: '🌫️',
+                    51: '🌦️', 53: '🌦️', 55: '🌧️',
+                    61: '🌧️', 63: '🌧️', 65: '🌧️',
+                    71: '❄️', 73: '❄️', 75: '❄️',
+                    80: '🌦️', 81: '🌧️', 82: '🌧️',
+                    95: '⛈️', 96: '⛈️', 99: '⛈️'
+                };
+                document.getElementById('weather-icon').textContent = emojiMap[code] || '❓';
+            } catch (e) {
+                document.getElementById('weather-desc').textContent = 'Ошибка загрузки';
+                document.getElementById('weather-temp').textContent = '--°';
+                document.getElementById('weather-icon').textContent = '⚠️';
+                console.error(e);
+            }
+        }
+        fetchWeather();
+
+        // === ПОИСК ===
+        const searchInput = document.getElementById('search-input');
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const query = encodeURIComponent(this.value.trim());
+                if (query) {
+                    window.location.href = 'https://duckduckgo.com/?q=' + query;
+                }
+            }
+        });
+
+        // === ПЕРСОНАЛИЗАЦИЯ ===
+        const personalizeBtn = document.getElementById('personalize-btn');
+        const customizeMenu = document.getElementById('customize-menu');
+        const overlay = document.getElementById('overlay');
+        const closeSettingsBtn = document.getElementById('close-settings-btn');
+
+        function openSettings() {
+            customizeMenu.classList.add('open');
+            overlay.classList.add('open');
+        }
+        function closeSettings() {
+            customizeMenu.classList.remove('open');
+            overlay.classList.remove('open');
+        }
+
+        personalizeBtn.addEventListener('click', openSettings);
+        overlay.addEventListener('click', closeSettings);
+        closeSettingsBtn.addEventListener('click', closeSettings);
+    </script>
+</body>
+</html>
