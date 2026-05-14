@@ -1,5 +1,5 @@
 /* =============================================
-   БАЗОВЫЕ СБРОСЫ И ТЕЛО
+   БАЗОВЫЕ СБРОСЫ И ТЕЛО (минимализм)
    ============================================= */
 * {
     margin: 0;
@@ -27,8 +27,8 @@ body {
     position: fixed;
     top: 16px;
     right: 16px;
-    background: rgba(0, 0, 0, 0.55);
-    backdrop-filter: blur(8px);
+    background: rgba(0, 0, 0, 0.75);   /* прозрачность 75% */
+    backdrop-filter: blur(12px);
     border-radius: 12px;
     padding: 10px 14px;
     display: flex;
@@ -37,20 +37,27 @@ body {
     font-size: 14px;
     color: #fff;
     z-index: 100;
+    transition: background 0.3s, opacity 0.3s;
+}
+.weather-widget:hover {
+    background: rgba(0, 0, 0, 0.55);   /* ~55% при наведении */
 }
 .weather-widget .temp {
     font-size: 22px;
     font-weight: bold;
+    color: #ff3333;                     /* красный акцент */
 }
 .weather-widget .desc {
     text-transform: capitalize;
+    opacity: 0.8;
 }
 .weather-icon {
     font-size: 28px;
+    opacity: 0.9;
 }
 
 /* =============================================
-   ЛОГОТИП
+   ЛОГОТИП (Nexus в стиле минимализма)
    ============================================= */
 .outer-wrapper {
     display: flex;
@@ -64,6 +71,11 @@ body {
     display: flex;
     justify-content: center;
     margin-bottom: 20px;
+    opacity: 0.85;
+    transition: opacity 0.3s;
+}
+.logo-and-wordmark-wrapper:hover {
+    opacity: 0.65;
 }
 .logo-and-wordmark {
     display: flex;
@@ -74,24 +86,48 @@ body {
     width: 36px;
     height: 36px;
     object-fit: contain;
+    opacity: 0.8;
+    transition: opacity 0.3s;
+}
+.logo-icon:hover {
+    opacity: 0.6;
 }
 .logo-text {
-    font-size: 26px;
-    font-weight: bold;
-    color: #ffffff;
-    font-family: "Segoe UI", "Helvetica Neue", sans-serif;
-    line-height: 1;
+    font-size: 28px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #ff0000, #cc0000, #660000);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent; /* fallback */
+    text-shadow: 0 0 20px rgba(255,0,0,0.5);
+    transition: text-shadow 0.3s, opacity 0.3s;
+    opacity: 0.9;
+}
+.logo-text:hover {
+    text-shadow: 0 0 30px rgba(255,0,0,0.8);
+    opacity: 0.7;
 }
 
 /* =============================================
-   ПОИСКОВАЯ ПАНЕЛЬ
+   ПОИСКОВАЯ ПАНЕЛЬ (чёрно‑красный градиент)
    ============================================= */
 .unified-search-wrapper {
     width: 100%;
     max-width: 600px;
     margin-bottom: 20px;
-    background: linear-gradient(to bottom, black 30%, #690000 100%);
+    background: linear-gradient(to bottom, rgba(0,0,0,0.8) 30%, rgba(105,0,0,0.9) 100%);
     border-radius: 0px;
+    border: 1px solid rgba(255,0,0,0.2);
+    transition: background 0.3s, border-color 0.3s, opacity 0.3s;
+    opacity: 0.9;
+}
+.unified-search-wrapper:hover {
+    background: linear-gradient(to bottom, rgba(0,0,0,0.7) 30%, rgba(139,0,0,0.9) 100%);
+    border-color: rgba(255,0,0,0.4);
+    opacity: 0.8;
 }
 .search-box {
     display: flex;
@@ -105,6 +141,8 @@ body {
     height: 24px;
     margin-right: 12px;
     flex-shrink: 0;
+    opacity: 0.7;
+    transition: opacity 0.3s;
 }
 .search-input {
     flex-grow: 1;
@@ -114,11 +152,14 @@ body {
     background: transparent;
     font-size: 16px;
     color: #ffffff;
-    caret-color: #ffffff;
+    caret-color: #ff0000;
 }
 .search-input::placeholder {
-    color: #cccccc;
-    opacity: 1;
+    color: rgba(255,255,255,0.5);
+    transition: color 0.3s;
+}
+.search-input:focus::placeholder {
+    color: rgba(255,255,255,0.3);
 }
 .search-actions {
     position: relative;
@@ -133,25 +174,27 @@ body {
     display: flex;
     align-items: center;
     gap: 4px;
-    background: none;
+    background: rgba(0,0,0,0.6);       /* ~75% от чёрного */
     border: none;
     color: #cccccc;
     cursor: pointer;
     font-size: 14px;
     padding: 4px 8px;
     border-radius: 4px;
-    transition: all 0.2s;
+    transition: background 0.3s, color 0.3s, border 0.3s, box-shadow 0.3s, opacity 0.3s;
+    opacity: 0.85;
 }
 .url-toggle-btn:hover {
-    background: rgba(128, 0, 0, 0.4);   /* бордовый при наведении */
+    background: rgba(128,0,0,0.55);    /* бордовый ~55% при наведении */
     color: #fff;
 }
 .url-toggle-btn.active {
-    background: rgba(160, 0, 0, 0.5);   /* чуть ярче при активации */
+    background: rgba(160,0,0,0.6);     /* ~60% при активации */
     border: 1px solid transparent;
-    border-image: linear-gradient(70deg, #ff0000, #000000) 1;  /* градиентная обводка */
-    box-shadow: 0 0 6px rgba(255, 0, 0, 0.5);
+    border-image: linear-gradient(70deg, #ff0000, #000000) 1;
+    box-shadow: 0 0 10px rgba(255,0,0,0.6);
     color: #fff;
+    opacity: 0.7;
 }
 .url-toggle-icon {
     width: 16px;
@@ -164,18 +207,20 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: none;
+    background: rgba(0,0,0,0.6);
     border: none;
     color: #cccccc;
     cursor: pointer;
     padding: 4px;
     border-radius: 4px;
-    transition: all 0.2s;
+    transition: background 0.3s, color 0.3s, opacity 0.3s;
     position: relative;
+    opacity: 0.85;
 }
 .settings-btn:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(128,0,0,0.55);
     color: #fff;
+    opacity: 0.65;
 }
 .settings-icon {
     width: 20px;
@@ -191,35 +236,39 @@ body {
     position: absolute;
     top: 100%;
     right: 0;
-    background: #1a1a1a;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(10,10,10,0.95);
+    border: 1px solid rgba(255,0,0,0.3);
     border-radius: 0;
     min-width: 200px;
     z-index: 200;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.8);
     overflow: visible;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
 }
 .settings-dropdown.open {
     display: block;
+    opacity: 1;
 }
 .settings-dropdown button {
     display: block;
     width: 100%;
     padding: 12px 16px;
     text-align: left;
-    background: linear-gradient(to bottom, #111111 30%, #222222 100%);
+    background: rgba(0,0,0,0.75);
     border: none;
     color: #fff;
     font-size: 14px;
     cursor: pointer;
-    transition: background 0.2s, filter 0.2s;
+    transition: background 0.3s, color 0.3s;
     border-radius: 0;
 }
 .settings-dropdown button:hover {
-    background: linear-gradient(to bottom, #222222 30%, #333333 100%);
+    background: rgba(128,0,0,0.6);   /* ~60% при наведении */
+    color: #ffcccc;
 }
 .settings-dropdown hr {
-    border-color: rgba(255,255,255,0.1);
+    border-color: rgba(255,0,0,0.2);
     margin: 4px 0;
 }
 
@@ -229,24 +278,31 @@ body {
     position: absolute;
     right: 100%;
     top: 0;
-    background: #1a1a1a;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(10,10,10,0.95);
+    border: 1px solid rgba(255,0,0,0.3);
     min-width: 200px;
     z-index: 210;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.8);
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
 }
 .settings-subpanel.show {
     display: block;
+    opacity: 1;
 }
 
 /* Кнопка-переключатель «Включить/Выключить» */
 .dynamic-toggle-btn {
-    background: linear-gradient(to bottom, #111111 30%, #169000 100%) !important; /* зелёный (выкл) */
-    transition: background 0.3s;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.8) 30%, #169000 100%) !important; /* зелёный (выкл) */
+    transition: background 0.3s, opacity 0.3s;
     font-weight: bold;
+    opacity: 0.85;
+}
+.dynamic-toggle-btn:hover {
+    opacity: 0.6;
 }
 .dynamic-toggle-btn.enabled {
-    background: linear-gradient(to bottom, #111111 30%, #690000 100%) !important; /* красный (вкл) */
+    background: linear-gradient(to bottom, rgba(0,0,0,0.8) 30%, #690000 100%) !important; /* красный (вкл) */
 }
 
 /* =============================================
@@ -256,7 +312,7 @@ body {
     height: 0;
     overflow: hidden;
     transition: height 0.3s ease, padding 0.3s ease;
-    background: transparent;
+    background: rgba(0,0,0,0.5);
     border-top: none;
     display: flex;
     align-items: center;
@@ -274,11 +330,14 @@ body {
     background: transparent;
     font-size: 14px;
     color: #ffffff;
-    caret-color: #ffffff;
+    caret-color: #ff0000;
 }
 .quick-jump-input::placeholder {
-    color: #888888;
-    opacity: 1;
+    color: rgba(255,255,255,0.4);
+    transition: color 0.3s;
+}
+.quick-jump-input:focus::placeholder {
+    color: rgba(255,255,255,0.2);
 }
 
 /* =============================================
@@ -288,6 +347,8 @@ body {
     width: 100%;
     max-width: 800px;
     margin: 0 auto;
+    opacity: 0.9;
+    transition: opacity 0.3s;
 }
 .top-sites-list {
     display: flex;
@@ -310,20 +371,26 @@ body {
     width: 80px;
     padding: 8px 4px;
     border-radius: 8px;
-    transition: background 0.2s;
+    transition: background 0.3s, transform 0.3s;
+    background: rgba(0,0,0,0.5);
 }
 .top-site-button:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(128,0,0,0.55);
+    transform: translateY(-2px);
 }
 .tile {
     width: 48px;
     height: 48px;
     border-radius: 8px;
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(255,255,255,0.1);
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
+    transition: background 0.3s;
+}
+.top-site-button:hover .tile {
+    background: rgba(255,0,0,0.2);
 }
 .tile img {
     width: 32px;
@@ -338,6 +405,11 @@ body {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    opacity: 0.8;
+    transition: opacity 0.3s;
+}
+.top-site-button:hover .title-label {
+    opacity: 1;
 }
 
 /* =============================================
@@ -347,8 +419,8 @@ body {
     position: fixed;
     top: 12px;
     right: 130px;
-    background: rgba(0, 0, 0, 0.4);
-    border: none;
+    background: rgba(0,0,0,0.7);
+    border: 1px solid rgba(255,0,0,0.3);
     border-radius: 4px;
     color: #fff;
     padding: 6px 12px;
@@ -357,14 +429,19 @@ body {
     display: flex;
     align-items: center;
     gap: 6px;
+    transition: background 0.3s, border-color 0.3s, opacity 0.3s;
+    opacity: 0.85;
 }
 .personalize-button:hover {
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(128,0,0,0.55);
+    border-color: rgba(255,0,0,0.6);
+    opacity: 0.65;
 }
 .personalize-button img {
     width: 16px;
     height: 16px;
     filter: invert(1);
+    opacity: 0.8;
 }
 .customize-menu {
     display: none;
@@ -372,15 +449,19 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: #2a2a3e;
+    background: rgba(10,10,10,0.95);
+    border: 1px solid rgba(255,0,0,0.4);
     color: #fff;
     padding: 20px;
     border-radius: 8px;
     z-index: 1000;
     min-width: 300px;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
 }
 .customize-menu.open {
     display: block;
+    opacity: 1;
 }
 .overlay {
     display: none;
@@ -389,8 +470,9 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0,0,0,0.6);
     z-index: 999;
+    transition: opacity 0.3s;
 }
 .overlay.open {
     display: block;
@@ -402,4 +484,16 @@ body {
 .unified-search-wrapper.draggable {
     cursor: grab;
     user-select: none;
+}
+.unified-search-wrapper.draggable:active {
+    cursor: grabbing;
+}
+
+/* опциональная анимация свечения логотипа */
+.logo-text {
+    animation: pulse 2s infinite;
+}
+@keyframes pulse {
+    0%, 100% { text-shadow: 0 0 20px rgba(255,0,0,0.5); }
+    50% { text-shadow: 0 0 40px rgba(255,0,0,0.9); }
 }
