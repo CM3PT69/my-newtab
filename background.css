@@ -3,15 +3,17 @@
     padding: 0;
     box-sizing: border-box;
 }
-html, body {
+
+html,
+body {
     height: 100%;
 }
+
 body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
-    padding-top: 8vh;
+    justify-content: center;
     position: relative;
 }
 
@@ -31,13 +33,16 @@ body {
     color: #fff;
     z-index: 100;
 }
+
 .weather-widget .temp {
     font-size: 22px;
     font-weight: bold;
 }
+
 .weather-widget .desc {
     text-transform: capitalize;
 }
+
 .weather-icon {
     font-size: 28px;
 }
@@ -55,18 +60,21 @@ body {
 .logo-and-wordmark-wrapper {
     display: flex;
     justify-content: center;
-    margin-bottom: 30px;
+    margin-bottom: 20px; /* ← уменьшили отступ, было 30px */
 }
+
 .logo-and-wordmark {
     display: flex;
     align-items: center;
     gap: 10px;
 }
+
 .logo-icon {
     width: 36px;
     height: 36px;
     object-fit: contain;
 }
+
 .logo-text {
     font-size: 26px;
     font-weight: bold;
@@ -79,7 +87,7 @@ body {
 .unified-search-wrapper {
     width: 100%;
     max-width: 600px;
-    margin-bottom: 30px;
+    margin-bottom: 20px; /* ← уменьшили отступ, было 30px */
     background: linear-gradient(to bottom, black 30%, #690000 100%);
     border-radius: 0px;
 }
@@ -91,12 +99,14 @@ body {
     padding: 0 16px;
     background: transparent;
 }
+
 .search-icon {
     width: 24px;
     height: 24px;
     margin-right: 12px;
     flex-shrink: 0;
 }
+
 .search-input {
     flex-grow: 1;
     height: 100%;
@@ -107,6 +117,7 @@ body {
     color: #ffffff;
     caret-color: #ffffff;
 }
+
 .search-input::placeholder {
     color: #cccccc;
     opacity: 1;
@@ -119,6 +130,7 @@ body {
     gap: 8px;
     margin-left: 12px;
 }
+
 .url-toggle-btn {
     display: flex;
     align-items: center;
@@ -132,19 +144,23 @@ body {
     border-radius: 4px;
     transition: all 0.2s;
 }
+
 .url-toggle-btn:hover {
     background: rgba(255, 255, 255, 0.1);
     color: #fff;
 }
+
 .url-toggle-btn.active {
     background: rgba(255, 255, 255, 0.2);
     color: #fff;
 }
+
 .url-toggle-icon {
     width: 16px;
     height: 16px;
     fill: currentColor;
 }
+
 .settings-btn {
     display: flex;
     align-items: center;
@@ -158,10 +174,12 @@ body {
     transition: all 0.2s;
     position: relative;
 }
+
 .settings-btn:hover {
     background: rgba(255, 255, 255, 0.1);
     color: #fff;
 }
+
 .settings-icon {
     width: 20px;
     height: 20px;
@@ -179,12 +197,14 @@ body {
     border-radius: 8px;
     min-width: 160px;
     z-index: 200;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
     overflow: hidden;
 }
+
 .settings-dropdown.open {
     display: block;
 }
+
 .settings-dropdown button {
     display: block;
     width: 100%;
@@ -197,6 +217,7 @@ body {
     cursor: pointer;
     transition: background 0.2s;
 }
+
 .settings-dropdown button:hover {
     background: rgba(255, 255, 255, 0.15);
 }
@@ -212,10 +233,12 @@ body {
     align-items: center;
     padding: 0 16px;
 }
+
 .quick-jump-box.expanded {
     height: 48px;
     padding: 0 16px;
 }
+
 .quick-jump-input {
     flex-grow: 1;
     height: 100%;
@@ -226,6 +249,7 @@ body {
     color: #ffffff;
     caret-color: #ffffff;
 }
+
 .quick-jump-input::placeholder {
     color: #888888;
     opacity: 1;
@@ -237,6 +261,7 @@ body {
     max-width: 800px;
     margin: 0 auto;
 }
+
 .top-sites-list {
     display: flex;
     flex-wrap: wrap;
@@ -245,9 +270,11 @@ body {
     list-style: none;
     padding: 0;
 }
+
 .top-site-outer {
     list-style: none;
 }
+
 .top-site-button {
     display: flex;
     flex-direction: column;
@@ -260,9 +287,11 @@ body {
     border-radius: 8px;
     transition: background 0.2s;
 }
+
 .top-site-button:hover {
     background: rgba(255, 255, 255, 0.1);
 }
+
 .tile {
     width: 48px;
     height: 48px;
@@ -273,11 +302,13 @@ body {
     justify-content: center;
     overflow: hidden;
 }
+
 .tile img {
     width: 32px;
     height: 32px;
     object-fit: contain;
 }
+
 .title-label {
     font-size: 12px;
     text-align: center;
@@ -304,14 +335,17 @@ body {
     align-items: center;
     gap: 6px;
 }
+
 .personalize-button:hover {
     background: rgba(0, 0, 0, 0.6);
 }
+
 .personalize-button img {
     width: 16px;
     height: 16px;
     filter: invert(1);
 }
+
 .customize-menu {
     display: none;
     position: fixed;
@@ -325,9 +359,11 @@ body {
     z-index: 1000;
     min-width: 300px;
 }
+
 .customize-menu.open {
     display: block;
 }
+
 .overlay {
     display: none;
     position: fixed;
@@ -338,6 +374,7 @@ body {
     background: rgba(0, 0, 0, 0.5);
     z-index: 999;
 }
+
 .overlay.open {
     display: block;
 }
