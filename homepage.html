@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>GenZH — Новая вкладка</title>
+    <title>Nexus New-Tab Bitch</title>
     <style>
         * {
             margin: 0;
@@ -28,6 +28,8 @@
             padding-top: 8vh;
             position: relative;
         }
+
+        /* Погодный виджет */
         .weather-widget {
             position: fixed;
             top: 16px;
@@ -53,6 +55,7 @@
         .weather-icon {
             font-size: 28px;
         }
+
         .outer-wrapper {
             display: flex;
             flex-direction: column;
@@ -61,20 +64,36 @@
             max-width: 1200px;
             padding: 0 20px;
         }
+
+        /* Логотип */
         .logo-and-wordmark-wrapper {
             display: flex;
             justify-content: center;
             margin-bottom: 30px;
         }
+        .logo-and-wordmark {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
         .logo-icon {
-            width: 48px;
-            height: 48px;
+            width: 36px;
+            height: 36px;
             object-fit: contain;
         }
+        .logo-text {
+            font-size: 26px;
+            font-weight: bold;
+            color: #ffffff;
+            font-family: "Segoe UI", "Helvetica Neue", sans-serif;
+            line-height: 1;
+        }
+
+        /* Основная поисковая строка */
         .search-wrapper {
             width: 100%;
             max-width: 600px;
-            margin-bottom: 30px;
+            margin-bottom: 12px; /* уменьшил отступ, чтобы добавить вторую панель */
         }
         .search-box {
             display: flex;
@@ -105,6 +124,39 @@
             color: #cccccc;
             opacity: 1;
         }
+
+        /* Панель быстрых переходов (bangs) */
+        .quick-jump-wrapper {
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 30px;
+        }
+        .quick-jump-box {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            height: 38px;
+            border-radius: 0px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 0 16px;
+        }
+        .quick-jump-input {
+            flex-grow: 1;
+            height: 100%;
+            border: none;
+            outline: none;
+            background: transparent;
+            font-size: 14px;
+            color: #ffffff;
+            caret-color: #ffffff;
+        }
+        .quick-jump-input::placeholder {
+            color: #888888;
+            opacity: 1;
+        }
+
+        /* Плитки */
         .top-sites-section {
             width: 100%;
             max-width: 800px;
@@ -160,10 +212,12 @@
             text-overflow: ellipsis;
             white-space: nowrap;
         }
+
+        /* Кнопка персонализации */
         .personalize-button {
             position: fixed;
             top: 12px;
-            right: 130px;
+            right: 130px; /* чтобы не перекрывала погоду */
             background: rgba(0, 0, 0, 0.4);
             border: none;
             border-radius: 4px;
@@ -183,6 +237,8 @@
             height: 16px;
             filter: invert(1);
         }
+
+        /* Диалог настроек */
         .customize-menu {
             display: none;
             position: fixed;
@@ -212,22 +268,6 @@
         .overlay.open {
             display: block;
         }
-        .logo-and-wordmark {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .logo-icon {
-            width: 36px;  /* подгони под свой вкус */
-            height: 36px;
-        }
-        .logo-text {
-            font-size: 26px;
-            font-weight: bold;
-            color: #ffffff;
-            font-family: "Segoe UI", "Helvetica Neue", sans-serif;
-            line-height: 1;
-        }
     </style>
 </head>
 <body>
@@ -240,19 +280,26 @@
     </div>
 
     <div class="outer-wrapper">
-        <!-- Логотип NexusLogoV1 (встроенный base64, заменишь на свой) -->
-       <div class="logo-and-wordmark-wrapper">
-    <div class="logo-and-wordmark">
-        <img class="logo-icon" src="NexusLogoV1.png" alt="Nexus Logo">
-        <span class="logo-text">Nexus</span>
-    </div>
-</div>
+        <!-- Логотип Nexus -->
+        <div class="logo-and-wordmark-wrapper">
+            <div class="logo-and-wordmark">
+                <img class="logo-icon" src="NexusLogoV1.png" alt="Nexus Logo">
+                <span class="logo-text">Nexus</span>
+            </div>
+        </div>
 
-        <!-- Поисковая строка с иконкой GenZH (встроенная) -->
+        <!-- Основная поисковая строка -->
         <div class="search-wrapper">
             <div class="search-box">
                 <img class="search-icon" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iI2NjY2NjYyI+PHBhdGggZD0iTTE1LjUgMTRoLS43OWwtLjI4LS4yN0MxNS40MSAxMi41OSAxNiAxMS4xMSAxNiA5LjUgMTYgNS45MSAxMy4wOSAzIDkuNSAzUzMgNS45MSAzIDkuNSA1LjkxIDE2IDkuNSAxNmMxLjYxIDAgMy4wOS0uNTkgNC4yMy0xLjU3bC4yNy4yOHYuNzlsNSA0Ljk5TDIwLjQ5IDE5bC00Ljk5LTV6bS02IDBDNy4wMSAxNCA1IDExLjk5IDUgOS41UzcuMDEgNSA5LjUgNSAxNCA3LjAxIDE0IDkuNSAxMS45OSAxNCA5LjUgMTR6Ii8+PC9zdmc+" alt="Search">
                 <input class="search-input" type="text" placeholder="Nexus Search" id="search-input" title="На основе DuckDuckGo">
+            </div>
+        </div>
+
+        <!-- Панель быстрых переходов (bangs) -->
+        <div class="quick-jump-wrapper">
+            <div class="quick-jump-box">
+                <input class="quick-jump-input" type="text" placeholder="Быстрый переход (ds, fd, yt...)" id="quick-jump-input" title="Введи команду или URL">
             </div>
         </div>
 
@@ -267,6 +314,7 @@
                         <span class="title-label">DeepSeek</span>
                     </a>
                 </li>
+                <!-- Добавляй свои сайты по такому же шаблону -->
             </ul>
         </div>
     </div>
@@ -326,7 +374,7 @@
         }
         fetchWeather();
 
-        // === ПОИСК ===
+        // === ПОИСК (основная строка) ===
         const searchInput = document.getElementById('search-input');
         searchInput.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
@@ -334,6 +382,50 @@
                 if (query) {
                     window.location.href = 'https://duckduckgo.com/?q=' + query;
                 }
+            }
+        });
+
+        // === БЫСТРЫЕ ПЕРЕХОДЫ (BANGS) ===
+        const quickJumpInput = document.getElementById('quick-jump-input');
+
+        const bangs = {
+            'ds': (query) => query ? `https://chat.deepseek.com/?q=${encodeURIComponent(query)}` : 'https://www.deepseek.com',
+            'fd': () => 'https://github.com/MrOtherGuy/fx-autoconfig',
+            'yt': (query) => query ? `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}` : 'https://www.youtube.com',
+            'gh': (query) => query ? `https://github.com/search?q=${encodeURIComponent(query)}` : 'https://github.com',
+            'wiki': (query) => query ? `https://ru.wikipedia.org/wiki/${encodeURIComponent(query)}` : 'https://ru.wikipedia.org',
+            'rdt': (query) => query ? `https://www.reddit.com/search/?q=${encodeURIComponent(query)}` : 'https://www.reddit.com',
+            // Добавляй свои команды: 'ключ': (оставшийся_текст) => 'ссылка'
+        };
+
+        quickJumpInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const raw = this.value.trim();
+                if (!raw) return;
+
+                // Проверка на прямой URL (начинается с http, https или содержит точку)
+                if (/^(https?:\/\/|www\.|[a-zA-Z0-9-]+\.\w{2,})/.test(raw)) {
+                    let url = raw;
+                    if (!/^https?:\/\//.test(url)) {
+                        url = 'https://' + url;
+                    }
+                    window.location.href = url;
+                    return;
+                }
+
+                // Разбираем команду и запрос
+                const parts = raw.split(/\s+/);
+                const command = parts[0].toLowerCase();
+                const query = parts.slice(1).join(' ');
+
+                if (bangs[command]) {
+                    const url = bangs[command](query);
+                    window.location.href = url;
+                    return;
+                }
+
+                // Если ничего не подошло — отправляем в DuckDuckGo
+                window.location.href = 'https://duckduckgo.com/?q=' + encodeURIComponent(raw);
             }
         });
 
