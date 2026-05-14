@@ -89,20 +89,23 @@
             line-height: 1;
         }
 
-        /* Основная поисковая строка */
-        .search-wrapper {
+        /* Объединённая поисковая секция */
+        .unified-search-wrapper {
             width: 100%;
             max-width: 600px;
-            margin-bottom: 12px; /* уменьшил отступ, чтобы добавить вторую панель */
+            margin-bottom: 30px;
+            background: linear-gradient(to bottom, black 30%, #2d1538 100%);
+            border-radius: 0px;
+            overflow: hidden; /* чтобы скрыть анимацию раскрытия */
         }
+
+        /* Верхняя строка (основной поиск + кнопки) */
         .search-box {
             display: flex;
             align-items: center;
-            width: 100%;
             height: 48px;
-            border-radius: 0px;
-            background: linear-gradient(to bottom, black 30%, #2d1538 100%);
             padding: 0 16px;
+            background: transparent; /* градиент задан родителем */
         }
         .search-icon {
             width: 24px;
@@ -125,20 +128,108 @@
             opacity: 1;
         }
 
-        /* Панель быстрых переходов (bangs) */
-        .quick-jump-wrapper {
-            width: 100%;
-            max-width: 600px;
-            margin-bottom: 30px;
-        }
-        .quick-jump-box {
+        /* Кнопки в правой части поисковой строки */
+        .search-actions {
             display: flex;
             align-items: center;
+            gap: 8px;
+            margin-left: 12px;
+        }
+        .url-toggle-btn {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: none;
+            border: none;
+            color: #cccccc;
+            cursor: pointer;
+            font-size: 14px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+        .url-toggle-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+        .url-toggle-btn.active {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+        }
+        .url-toggle-icon {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
+        .settings-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: none;
+            border: none;
+            color: #cccccc;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            transition: all 0.2s;
+            position: relative;
+        }
+        .settings-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+        .settings-icon {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        /* Выпадающее меню настроек (шестерёнки) */
+        .settings-dropdown {
+            display: none;
+            position: absolute;
+            top: 110%;
+            right: 0;
+            background: #2a2a3e;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            min-width: 160px;
+            z-index: 200;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            overflow: hidden;
+        }
+        .settings-dropdown.open {
+            display: block;
+        }
+        .settings-dropdown button {
+            display: block;
             width: 100%;
-            height: 38px;
-            border-radius: 0px;
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 10px 16px;
+            text-align: left;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .settings-dropdown button:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Нижняя панель быстрых переходов */
+        .quick-jump-box {
+            height: 0;
+            overflow: hidden;
+            transition: height 0.3s ease, padding 0.3s ease;
+            background: transparent;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+        }
+        .quick-jump-box.expanded {
+            height: 48px;
             padding: 0 16px;
         }
         .quick-jump-input {
@@ -213,11 +304,11 @@
             white-space: nowrap;
         }
 
-        /* Кнопка персонализации */
+        /* Кнопка персонализации (старая) – оставим, но можно скрыть */
         .personalize-button {
             position: fixed;
             top: 12px;
-            right: 130px; /* чтобы не перекрывала погоду */
+            right: 130px;
             background: rgba(0, 0, 0, 0.4);
             border: none;
             border-radius: 4px;
@@ -237,8 +328,6 @@
             height: 16px;
             filter: invert(1);
         }
-
-        /* Диалог настроек */
         .customize-menu {
             display: none;
             position: fixed;
@@ -288,17 +377,31 @@
             </div>
         </div>
 
-        <!-- Основная поисковая строка -->
-        <div class="search-wrapper">
+        <!-- Объединённая поисковая секция -->
+        <div class="unified-search-wrapper">
+            <!-- Верхняя строка (основной поиск + кнопки) -->
             <div class="search-box">
                 <img class="search-icon" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iI2NjY2NjYyI+PHBhdGggZD0iTTE1LjUgMTRoLS43OWwtLjI4LS4yN0MxNS40MSAxMi41OSAxNiAxMS4xMSAxNiA5LjUgMTYgNS45MSAxMy4wOSAzIDkuNSAzUzMgNS45MSAzIDkuNSA1LjkxIDE2IDkuNSAxNmMxLjYxIDAgMy4wOS0uNTkgNC4yMy0xLjU3bC4yNy4yOHYuNzlsNSA0Ljk5TDIwLjQ5IDE5bC00Ljk5LTV6bS02IDBDNy4wMSAxNCA1IDExLjk5IDUgOS41UzcuMDEgNSA5LjUgNSAxNCA3LjAxIDE0IDkuNSAxMS45OSAxNCA5LjUgMTR6Ii8+PC9zdmc+" alt="Search">
                 <input class="search-input" type="text" placeholder="Nexus Search" id="search-input" title="На основе DuckDuckGo">
+                <div class="search-actions">
+                    <!-- Кнопка включения панели URL -->
+                    <button class="url-toggle-btn" id="url-toggle-btn" title="Включить режим поиска по URL">
+                        <svg class="url-toggle-icon" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                        <span>URL</span>
+                    </button>
+                    <!-- Шестерёнка -->
+                    <button class="settings-btn" id="settings-btn" title="Настройки">
+                        <svg class="settings-icon" viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.31.06-.63.06-.94 0-.31-.02-.63-.06-.94l2.03-1.58c.18-.14.23-.38.12-.56l-1.89-3.28c-.12-.19-.36-.26-.56-.18l-2.38.96c-.5-.38-1.06-.68-1.66-.88L14.72 3.3c-.04-.2-.2-.34-.4-.34h-3.78c-.2 0-.36.14-.4.34l-.26 2.38c-.6.2-1.16.5-1.66.88l-2.38-.96c-.2-.08-.44-.01-.56.18l-1.89 3.28c-.12.19-.07.42.12.56l2.03 1.58c-.04.31-.06.63-.06.94 0 .31.02.63.06.94l-2.03 1.58c-.18.14-.23.38-.12.56l1.89 3.28c.12.19.36.26.56.18l2.38-.96c.5.38 1.06.68 1.66.88l.26 2.38c.04.2.2.34.4.34h3.78c.2 0 .36-.14.4-.34l.26-2.38c.6-.2 1.16-.5 1.66-.88l2.38.96c.2.08.44.01.56-.18l1.89-3.28c.12-.19.07-.42-.12-.56l-2.03-1.58zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/></svg>
+                        <div class="settings-dropdown" id="settings-dropdown">
+                            <button>Тест 1</button>
+                            <button>Тест 2</button>
+                            <button>Тест 3</button>
+                        </div>
+                    </button>
+                </div>
             </div>
-        </div>
-
-        <!-- Панель быстрых переходов (bangs) -->
-        <div class="quick-jump-wrapper">
-            <div class="quick-jump-box">
+            <!-- Нижняя панель (быстрые переходы) -->
+            <div class="quick-jump-box" id="quick-jump-box">
                 <input class="quick-jump-input" type="text" placeholder="Быстрый переход (ds, fd, yt...)" id="quick-jump-input" title="Введи команду или URL">
             </div>
         </div>
@@ -314,12 +417,12 @@
                         <span class="title-label">DeepSeek</span>
                     </a>
                 </li>
-                <!-- Добавляй свои сайты по такому же шаблону -->
+                <!-- Добавляй свои сайты по шаблону -->
             </ul>
         </div>
     </div>
 
-    <!-- Кнопка персонализации -->
+    <!-- Кнопка персонализации (старая) -->
     <button class="personalize-button" id="personalize-btn">
         <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0id2hpdGUiPjxwYXRoIGQ9Ik0zIDE3LjI1VjIxaDMuNzVMMTcuODEgOS45NGwtMy43NS0zLjc1TDMgMTcuMjV6TTIwLjcxIDcuMDRjLjM5LS4zOS4zOS0xLjAyIDAtMS40MWwtMi4zNC0yLjM0Yy0uMzktLjM5LTEuMDItLjM5LTEuNDEgMGwtMS44MyAxLjgzIDMuNzUgMy43NSAxLjgzLTEuODN6Ii8+PC9zdmc+" alt="">
         Персонализация
@@ -374,7 +477,7 @@
         }
         fetchWeather();
 
-        // === ПОИСК (основная строка) ===
+        // === ПОИСК (основной) ===
         const searchInput = document.getElementById('search-input');
         searchInput.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
@@ -385,9 +488,24 @@
             }
         });
 
-        // === БЫСТРЫЕ ПЕРЕХОДЫ (BANGS) ===
-        const quickJumpInput = document.getElementById('quick-jump-input');
+        // === ПЕРЕКЛЮЧАТЕЛЬ ПАНЕЛИ БЫСТРЫХ ПЕРЕХОДОВ ===
+        const urlToggleBtn = document.getElementById('url-toggle-btn');
+        const quickJumpBox = document.getElementById('quick-jump-box');
+        let urlMode = false;
 
+        urlToggleBtn.addEventListener('click', () => {
+            urlMode = !urlMode;
+            if (urlMode) {
+                quickJumpBox.classList.add('expanded');
+                urlToggleBtn.classList.add('active');
+            } else {
+                quickJumpBox.classList.remove('expanded');
+                urlToggleBtn.classList.remove('active');
+            }
+        });
+
+        // === БЫСТРЫЕ ПЕРЕХОДЫ (нижняя панель) ===
+        const quickJumpInput = document.getElementById('quick-jump-input');
         const bangs = {
             'ds': (query) => query ? `https://chat.deepseek.com/?q=${encodeURIComponent(query)}` : 'https://www.deepseek.com',
             'fd': () => 'https://github.com/MrOtherGuy/fx-autoconfig',
@@ -395,41 +513,46 @@
             'gh': (query) => query ? `https://github.com/search?q=${encodeURIComponent(query)}` : 'https://github.com',
             'wiki': (query) => query ? `https://ru.wikipedia.org/wiki/${encodeURIComponent(query)}` : 'https://ru.wikipedia.org',
             'rdt': (query) => query ? `https://www.reddit.com/search/?q=${encodeURIComponent(query)}` : 'https://www.reddit.com',
-            // Добавляй свои команды: 'ключ': (оставшийся_текст) => 'ссылка'
         };
 
         quickJumpInput.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 const raw = this.value.trim();
                 if (!raw) return;
-
-                // Проверка на прямой URL (начинается с http, https или содержит точку)
                 if (/^(https?:\/\/|www\.|[a-zA-Z0-9-]+\.\w{2,})/.test(raw)) {
                     let url = raw;
-                    if (!/^https?:\/\//.test(url)) {
-                        url = 'https://' + url;
-                    }
+                    if (!/^https?:\/\//.test(url)) url = 'https://' + url;
                     window.location.href = url;
                     return;
                 }
-
-                // Разбираем команду и запрос
                 const parts = raw.split(/\s+/);
                 const command = parts[0].toLowerCase();
                 const query = parts.slice(1).join(' ');
-
                 if (bangs[command]) {
-                    const url = bangs[command](query);
-                    window.location.href = url;
+                    window.location.href = bangs[command](query);
                     return;
                 }
-
-                // Если ничего не подошло — отправляем в DuckDuckGo
                 window.location.href = 'https://duckduckgo.com/?q=' + encodeURIComponent(raw);
             }
         });
 
-        // === ПЕРСОНАЛИЗАЦИЯ ===
+        // === ШЕСТЕРЁНКА И ВЫПАДАЮЩЕЕ МЕНЮ ===
+        const settingsBtn = document.getElementById('settings-btn');
+        const settingsDropdown = document.getElementById('settings-dropdown');
+
+        settingsBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); // чтобы клик не закрыл меню сразу
+            settingsDropdown.classList.toggle('open');
+        });
+
+        // Закрытие меню при клике вне
+        document.addEventListener('click', (e) => {
+            if (!settingsBtn.contains(e.target)) {
+                settingsDropdown.classList.remove('open');
+            }
+        });
+
+        // === ПЕРСОНАЛИЗАЦИЯ (старая) ===
         const personalizeBtn = document.getElementById('personalize-btn');
         const customizeMenu = document.getElementById('customize-menu');
         const overlay = document.getElementById('overlay');
