@@ -41,7 +41,7 @@ fetchWeather();
 
 // === ПОИСК (основной) ===
 const searchInput = document.getElementById('search-input');
-searchInput.addEventListener('keypress', function(e) {
+searchInput.addEventListener('keypress', function (e) {
     if (e.key === 'Enter') {
         const query = encodeURIComponent(this.value.trim());
         if (query) {
@@ -77,7 +77,7 @@ const bangs = {
     'rdt': (query) => query ? `https://www.reddit.com/search/?q=${encodeURIComponent(query)}` : 'https://www.reddit.com',
 };
 
-quickJumpInput.addEventListener('keypress', function(e) {
+quickJumpInput.addEventListener('keypress', function (e) {
     if (e.key === 'Enter') {
         const raw = this.value.trim();
         if (!raw) return;
@@ -186,7 +186,7 @@ document.getElementById('reset-panel').addEventListener('click', () => {
 });
 
 // Сохранение позиции (только панель)
-document.getElementById('save-position').addEventListener('change', function() {
+document.getElementById('save-position').addEventListener('change', function () {
     savePosition = this.checked;
     if (savePosition && dynamicMode) {
         savePanelState();
@@ -243,3 +243,73 @@ function closeSettings() {
 personalizeBtn.addEventListener('click', openSettings);
 overlay.addEventListener('click', closeSettings);
 closeSettingsBtn.addEventListener('click', closeSettings);
+
+// === АНИМАЦИЯ "СПАСЕНИЕ ПАНЕЛИ" ===
+const rescueBtn = document.getElementById('rescue-gear');
+const rescueText = document.getElementById('rescue-text');
+const originalSettingsBtn = document.getElementById('settings-btn');
+
+function checkPanelVisibility() {
+    const rect = searchWrapper.getBoundingClientRect();
+    const winW = window.innerWidth;
+    const winH = window.innerHeight;
+    // Панель считается "потерянной", если её центр вне экрана или она сильно смещена
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    return (centerX < 0 || centerX > winW || centerY < 0 || centerY > winH);
+}
+
+function showRescueButton() {
+    if (!dynamicMode) return;
+    if (checkPanelVisibility()) {
+        rescueBtn.style.display = 'flex';
+        rescueText.style.display = 'block';
+    } else {
+        rescueBtn.style.display = 'none';
+        rescueText.style.display = 'none';
+    }
+}
+
+// Обработчик клика по центральной шестерёнке
+rescueBtn.addEventListener('click', () => {
+    // 1. Вращаем шестерёнку
+    rescueBtn.classList.add('spin');
+
+    // 2. Через 600 мс (половина оборота) начинаем показывать панель
+    setTimeout(() => {
+        searchWrapper.style.transition = 'transform 0.4s ease, opacity 0.4s ease';
+        searchWrapper.style.transform = 'scale(1)';
+        searchWrapper.style.opacity = '1';
+        searchWrapper.style.pointerEvents = 'auto';
+
+        // Возвращаем панель в центр экрана (или оставляем текущую позицию? Лучше в центр, иначе опять потеряется)
+        searchWrapper.style.position = 'fixed';
+        searchWrapper.style.left = '50%';
+        searchWrapper.style.top = '50%';
+        searchWrapper.style.margin = '0';
+        searchWrapper.style.transform = 'translate(-50%, -50%) scale(1)';
+    }, 600);
+
+    // 3. После завершения анимации (1.2 с) убираем всё лишнее
+    setTimeout(() => {
+        rescueBtn.classList.remove('spin');
+        rescueBtn.style.display = 'none';
+        rescueText.style.display = 'none';
+        // Возвращаем стандартные стили, убираем transform
+        searchWrapper.style.transition = '';
+        searchWrapper.style.transform = '';
+        searchWrapper.style.opacity = '';
+        searchWrapper.style.pointerEvents = '';
+        // Привязываем панель к новым координатам (уже в центре)
+        // Можно сохранить состояние, если включено сохранение
+        if (savePosition) savePanelState();
+    }, 1200);
+});
+
+// Добавим проверку после каждого перетаскивания (в mouseup)
+// Найди в коде window.addEventListener('mouseup', ...) и внутри, после присвоения isDragging = false, добавь:
+// showRescueButton();
+
+// Также проверяем при включении динамического режима, если панель уже была за экраном.
+// Внутри toggleBtn.addEventListener('click', ...) после updateToggleButton(); можно добавить:
+// if (dynamicMode) setTimeout(showRescueButton, 100);
