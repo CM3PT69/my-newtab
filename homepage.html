@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Nexus New-Tab V3.1</title>
+    <title>Nexus New-Tab V3.2</title>
     <style>
         * {
             margin: 0;
@@ -96,8 +96,8 @@
             margin-bottom: 30px;
             background: linear-gradient(to bottom, black 30%, #2d1538 100%);
             border-radius: 0px;
-            overflow: hidden; /* чтобы скрыть анимацию раскрытия */
-        }
+        /* overflow: hidden;  убрали, чтобы меню не обрезалось */
+}
 
         /* Верхняя строка (основной поиск + кнопки) */
         .search-box {
@@ -130,6 +130,7 @@
 
         /* Кнопки в правой части поисковой строки */
         .search-actions {
+            position: relative;  /* чтобы выпадашка позиционировалась относительно этого блока */
             display: flex;
             align-items: center;
             gap: 8px;
@@ -220,7 +221,7 @@
         /* Нижняя панель быстрых переходов */
         .quick-jump-box {
             height: 0;
-            overflow: hidden;
+            overflow: hidden;   /* вот это должно быть здесь */
             transition: height 0.3s ease, padding 0.3s ease;
             background: transparent;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
@@ -228,9 +229,36 @@
             align-items: center;
             padding: 0 16px;
         }
-        .quick-jump-box.expanded {
-            height: 48px;
-            padding: 0 16px;
+       .settings-dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;          /* сразу под кнопкой */
+            right: 0;
+            background: rgb(69, 69, 69);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            min-width: 160px;
+            z-index: 200;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            overflow: hidden;
+        }
+       .settings-dropdown.open {
+            display: block;
+        }
+       .settings-dropdown button {
+            display: block;
+            width: 100%;
+            padding: 10px 16px;
+            text-align: left;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+       .settings-dropdown button:hover {
+            background: rgba(255, 255, 255, 0.15);
         }
         .quick-jump-input {
             flex-grow: 1;
@@ -377,7 +405,7 @@
             </div>
         </div>
 
-        <!-- Объединённая поисковая секция -->
+             <!-- Объединённая поисковая секция -->
         <div class="unified-search-wrapper">
             <!-- Верхняя строка (основной поиск + кнопки) -->
             <div class="search-box">
@@ -392,20 +420,20 @@
                     <!-- Шестерёнка -->
                     <button class="settings-btn" id="settings-btn" title="Настройки">
                         <svg class="settings-icon" viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.31.06-.63.06-.94 0-.31-.02-.63-.06-.94l2.03-1.58c.18-.14.23-.38.12-.56l-1.89-3.28c-.12-.19-.36-.26-.56-.18l-2.38.96c-.5-.38-1.06-.68-1.66-.88L14.72 3.3c-.04-.2-.2-.34-.4-.34h-3.78c-.2 0-.36.14-.4.34l-.26 2.38c-.6.2-1.16.5-1.66.88l-2.38-.96c-.2-.08-.44-.01-.56.18l-1.89 3.28c-.12.19-.07.42.12.56l2.03 1.58c-.04.31-.06.63-.06.94 0 .31.02.63.06.94l-2.03 1.58c-.18.14-.23.38-.12.56l1.89 3.28c.12.19.36.26.56.18l2.38-.96c.5.38 1.06.68 1.66.88l.26 2.38c.04.2.2.34.4.34h3.78c.2 0 .36-.14.4-.34l.26-2.38c.6-.2 1.16-.5 1.66-.88l2.38.96c.2.08.44.01.56-.18l1.89-3.28c.12-.19.07-.42-.12-.56l-2.03-1.58zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/></svg>
-                        <div class="settings-dropdown" id="settings-dropdown">
-                            <button>Тест 1</button>
-                            <button>Тест 2</button>
-                            <button>Тест 3</button>
-                        </div>
                     </button>
+                    <!-- Выпадающее меню (вне кнопки) -->
+                    <div class="settings-dropdown" id="settings-dropdown">
+                        <button>Тест 1</button>
+                        <button>Тест 2</button>
+                        <button>Тест 3</button>
+                    </div>
                 </div>
             </div>
             <!-- Нижняя панель (быстрые переходы) -->
             <div class="quick-jump-box" id="quick-jump-box">
-                <input class="quick-jump-input" type="text" placeholder="Быстрый переход (ds, fd, yt...)" id="quick-jump-input" title="Введи команду или URL">
+                <input class="quick-jump-input" type="text" placeholder="Nexus URL Search" id="quick-jump-input" title="Введи команду или URL">
             </div>
         </div>
-
         <!-- Плитки -->
         <div class="top-sites-section">
             <ul class="top-sites-list">
