@@ -1,0 +1,343 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+html, body {
+    height: 100%;
+}
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 8vh;
+    position: relative;
+}
+
+/* Погодный виджет */
+.weather-widget {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(8px);
+    border-radius: 12px;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    color: #fff;
+    z-index: 100;
+}
+.weather-widget .temp {
+    font-size: 22px;
+    font-weight: bold;
+}
+.weather-widget .desc {
+    text-transform: capitalize;
+}
+.weather-icon {
+    font-size: 28px;
+}
+
+.outer-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px;
+    padding: 0 20px;
+}
+
+/* Логотип */
+.logo-and-wordmark-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+.logo-and-wordmark {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.logo-icon {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+}
+.logo-text {
+    font-size: 26px;
+    font-weight: bold;
+    color: #ffffff;
+    font-family: "Segoe UI", "Helvetica Neue", sans-serif;
+    line-height: 1;
+}
+
+/* Объединённая поисковая секция */
+.unified-search-wrapper {
+    width: 100%;
+    max-width: 600px;
+    margin-bottom: 30px;
+    background: linear-gradient(to bottom, black 30%, #2d1538 100%);
+    border-radius: 0px;
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+    height: 48px;
+    padding: 0 16px;
+    background: transparent;
+}
+.search-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 12px;
+    flex-shrink: 0;
+}
+.search-input {
+    flex-grow: 1;
+    height: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 16px;
+    color: #ffffff;
+    caret-color: #ffffff;
+}
+.search-input::placeholder {
+    color: #cccccc;
+    opacity: 1;
+}
+
+.search-actions {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 12px;
+}
+.url-toggle-btn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: none;
+    border: none;
+    color: #cccccc;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+.url-toggle-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+.url-toggle-btn.active {
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+.url-toggle-icon {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+}
+.settings-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    color: #cccccc;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    transition: all 0.2s;
+    position: relative;
+}
+.settings-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+.settings-icon {
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
+}
+
+/* Выпадающее меню настроек */
+.settings-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: rgb(69, 69, 69);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    min-width: 160px;
+    z-index: 200;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    overflow: hidden;
+}
+.settings-dropdown.open {
+    display: block;
+}
+.settings-dropdown button {
+    display: block;
+    width: 100%;
+    padding: 10px 16px;
+    text-align: left;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.settings-dropdown button:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+/* Нижняя панель URL-поиска */
+.quick-jump-box {
+    height: 0;
+    overflow: hidden;
+    transition: height 0.3s ease, padding 0.3s ease;
+    background: transparent;
+    border-top: none;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+}
+.quick-jump-box.expanded {
+    height: 48px;
+    padding: 0 16px;
+}
+.quick-jump-input {
+    flex-grow: 1;
+    height: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 14px;
+    color: #ffffff;
+    caret-color: #ffffff;
+}
+.quick-jump-input::placeholder {
+    color: #888888;
+    opacity: 1;
+}
+
+/* Плитки */
+.top-sites-section {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+}
+.top-sites-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    list-style: none;
+    padding: 0;
+}
+.top-site-outer {
+    list-style: none;
+}
+.top-site-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: #fff;
+    width: 80px;
+    padding: 8px 4px;
+    border-radius: 8px;
+    transition: background 0.2s;
+}
+.top-site-button:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+.tile {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+.tile img {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+}
+.title-label {
+    font-size: 12px;
+    text-align: center;
+    word-break: break-word;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Кнопка персонализации */
+.personalize-button {
+    position: fixed;
+    top: 12px;
+    right: 130px;
+    background: rgba(0, 0, 0, 0.4);
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    padding: 6px 12px;
+    cursor: pointer;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.personalize-button:hover {
+    background: rgba(0, 0, 0, 0.6);
+}
+.personalize-button img {
+    width: 16px;
+    height: 16px;
+    filter: invert(1);
+}
+.customize-menu {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #2a2a3e;
+    color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    z-index: 1000;
+    min-width: 300px;
+}
+.customize-menu.open {
+    display: block;
+}
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+.overlay.open {
+    display: block;
+}

@@ -1,0 +1,62 @@
+/* Сброс фона страницы */
+body {
+    background-color: #000;
+    margin: 0;
+    padding: 0;
+    font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    color: #fff;
+}
+
+/* Фоновый SVG-рисунок: фиксированный, на весь экран, позади всего */
+.background-svg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    pointer-events: none;
+}
+
+.background-svg svg {
+    width: 100%;
+    height: 100%;
+}
+
+/* Стили для элементов фона */
+.laser {
+    fill: none;
+    stroke-linecap: round;
+}
+
+.laser-blur {
+    filter: url(#blurGlow);
+    opacity: 0.35;
+}
+
+.laser-core {
+    filter: url(#coreGlow);
+}
+
+.laser-thread {
+    stroke: #ffffff;
+    filter: url(#threadGlow);
+}
+
+.spark {
+    opacity: 0.9;
+}
+
+.fog {
+    fill: #ff0000;
+    opacity: 0.08;
+    filter: url(#fogBlur);
+}
+
+.spark-soft {
+    filter: url(#softGlow);
+}
+
+.spark-bright {
+    filter: url(#brightGlow);
+}
