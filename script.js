@@ -107,9 +107,121 @@ settingsBtn.addEventListener('click', (e) => {
     settingsDropdown.classList.toggle('open');
 });
 
+// Исправление: меню не закрывается при клике внутри него
 document.addEventListener('click', (e) => {
-    if (!settingsBtn.contains(e.target)) {
+    if (!settingsBtn.contains(e.target) && !settingsDropdown.contains(e.target)) {
         settingsDropdown.classList.remove('open');
+    }
+});
+
+// === ДИНАМИЧЕСКАЯ ПАНЕЛЬ (ТОЛЬКО ПЕРЕМЕЩЕНИЕ) ===
+const searchWrapper = document.querySelector('.unified-search-wrapper');
+
+let dynamicMode = false;
+let savePosition = false;
+
+// Кнопка-переключатель
+const toggleBtn = document.getElementById('dynamic-toggle');
+
+function updateToggleButton() {
+    if (dynamicMode) {
+        toggleBtn.classList.add('enabled');
+    } else {
+        toggleBtn.classList.remove('enabled');
+    }
+}
+
+toggleBtn.addEventListener('click', () => {
+    dynamicMode = !dynamicMode;
+    updateToggleButton();
+    if (dynamicMode) {
+        searchWrapper.classList.add('draggable');
+    } else {
+        searchWrapper.classList.remove('draggable');
+    }
+});
+
+// Перетаскивание
+let isDragging = false;
+let startX, startY, initialX, initialY;
+
+searchWrapper.addEventListener('mousedown', (e) => {
+    if (!dynamicMode) return;
+    if (e.target.closest('.search-input') || e.target.closest('.quick-jump-input') || e.target.closest('button')) return;
+    e.preventDefault();
+    isDragging = true;
+    startX = e.clientX;
+    startY = e.clientY;
+    const rect = searchWrapper.getBoundingClientRect();
+    initialX = rect.left;
+    initialY = rect.top;
+    searchWrapper.style.cursor = 'grabbing';
+});
+
+window.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    const dx = e.clientX - startX;
+    const dy = e.clientY - startY;
+    searchWrapper.style.position = 'fixed';
+    searchWrapper.style.left = (initialX + dx) + 'px';
+    searchWrapper.style.top = (initialY + dy) + 'px';
+    searchWrapper.style.margin = '0';
+});
+
+window.addEventListener('mouseup', () => {
+    if (isDragging) {
+        isDragging = false;
+        searchWrapper.style.cursor = dynamicMode ? 'grab' : '';
+        if (savePosition) savePanelState();
+    }
+});
+
+// Сброс панели
+document.getElementById('reset-panel').addEventListener('click', () => {
+    searchWrapper.style.position = '';
+    searchWrapper.style.left = '';
+    searchWrapper.style.top = '';
+    searchWrapper.style.margin = '';
+    if (savePosition) savePanelState();
+});
+
+// Сохранение позиции (только панель)
+document.getElementById('save-position').addEventListener('change', function() {
+    savePosition = this.checked;
+    if (savePosition && dynamicMode) {
+        savePanelState();
+    } else {
+        localStorage.removeItem('panelState');
+    }
+});
+
+function savePanelState() {
+    const state = {
+        left: searchWrapper.style.left,
+        top: searchWrapper.style.top,
+        position: searchWrapper.style.position
+    };
+    localStorage.setItem('panelState', JSON.stringify(state));
+}
+
+function loadPanelState() {
+    const saved = localStorage.getItem('panelState');
+    if (!saved) return;
+    const state = JSON.parse(saved);
+    if (state.left || state.top) {
+        searchWrapper.style.position = state.position || 'fixed';
+        searchWrapper.style.left = state.left;
+        searchWrapper.style.top = state.top;
+        searchWrapper.style.margin = '0';
+    }
+}
+
+// Загрузка сохранённого состояния при старте
+document.addEventListener('DOMContentLoaded', () => {
+    if (localStorage.getItem('panelState')) {
+        document.getElementById('save-position').checked = true;
+        savePosition = true;
+        loadPanelState();
     }
 });
 
